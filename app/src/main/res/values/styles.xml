@@ -1,0 +1,19 @@
+<resources>
+    <style name="RoundedCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15dp</item>
+    </style>
+
+    <style name="CustomActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="background">@color/white</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+
+    <style name="BottomNavigationMovieDetail" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="BottomNavigationMovieDetail.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>
