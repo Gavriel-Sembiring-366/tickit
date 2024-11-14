@@ -1,4 +1,4 @@
-package com.example.tickit.ui.dashboard
+package com.example.tickit.ui.sinopsis
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.tickit.R
-import com.example.tickit.databinding.FragmentDashboardBinding
+import com.example.tickit.databinding.FragmentSinopsisBinding
 import com.example.tickit.entities.film.FilmRepository
 
-class DashboardFragment : Fragment() {
+class SinopsisFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentSinopsisBinding? = null
     private val repository by lazy { FilmRepository(requireContext()) }
-    private val viewModel: DashboardViewModel by viewModels { DashboardViewModelFactory(repository) }
+    private val viewModel: SinopsisViewModel by viewModels { SinopsisViewModelFactory(repository) }
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
@@ -24,13 +23,14 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentSinopsisBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         viewModel.getFilmById(1)
         viewModel.data.observe(viewLifecycleOwner) { film ->
             if (film != null) {
-                binding.textDashboard.text = film.sinopsis?: ""
+                binding.sinopsisText.text = film.sinopsis?: ""
+                binding.sutradaraText.text = film.sutradara?: ""
             }
         }
 

@@ -1,6 +1,8 @@
 package com.example.tickit.database
 
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import com.example.tickit.R
 import com.example.tickit.database.DBHelper.Companion.TABLE_BANGKU
 import com.example.tickit.database.DBHelper.Companion.TABLE_BIOSKOP
 import com.example.tickit.database.DBHelper.Companion.TABLE_FILM
@@ -12,31 +14,40 @@ import com.example.tickit.database.DBHelper.Companion.TABLE_TIKET
 
 class populatedata {
     fun populateMockData(db: SQLiteDatabase) {
-//        db.execSQL("INSERT INTO $TABLE_BIOSKOP (id_bioskop, nama_bioskop, alamat, kapasitas) VALUES (1, 'Cinema XXI', 'Jl. ABC No. 123', 150)")
-//        db.execSQL("INSERT INTO $TABLE_BIOSKOP (id_bioskop, nama_bioskop, alamat, kapasitas) VALUES (2, 'CGV Blitz', 'Jl. XYZ No. 456', 200)")
-//
-//        db.execSQL("INSERT INTO $TABLE_FILM (id_film, judul, genre, durasi, sinopsis, tahun_rilis, umur_rating) VALUES (1, 'The Great Adventure', 'Action', 120, 'An epic adventure film.', 2022, 'PG-13')")
-//        db.execSQL("INSERT INTO $TABLE_FILM (id_film, judul, genre, durasi, sinopsis, tahun_rilis, umur_rating) VALUES (2, 'Comedy Night', 'Comedy', 90, 'A hilarious comedy movie.', 2021, 'PG')")
-//
-//        db.execSQL("INSERT INTO $TABLE_JADWAL (id_jadwal, id_film, id_bioskop, waktu_tayang) VALUES (1, 1, 1, '2024-01-01 10:00:00')")
-//        db.execSQL("INSERT INTO $TABLE_JADWAL (id_jadwal, id_film, id_bioskop, waktu_tayang) VALUES (2, 2, 2, '2024-01-01 14:00:00')")
-//
-//        db.execSQL("INSERT INTO $TABLE_BANGKU (id_bangku, id_bioskop, nomor_bangku) VALUES (1, 1, 'A1')")
-//        db.execSQL("INSERT INTO $TABLE_BANGKU (id_bangku, id_bioskop, nomor_bangku) VALUES (2, 1, 'A2')")
-//        db.execSQL("INSERT INTO $TABLE_BANGKU (id_bangku, id_bioskop, nomor_bangku) VALUES (3, 2, 'B1')")
-//        db.execSQL("INSERT INTO $TABLE_BANGKU (id_bangku, id_bioskop, nomor_bangku) VALUES (4, 2, 'B2')")
-//
-//        db.execSQL("INSERT INTO $TABLE_PENGGUNA (id_pengguna, nama, email, password) VALUES (1, 'Alice', 'alice@example.com', 'password123')")
-//        db.execSQL("INSERT INTO $TABLE_PENGGUNA (id_pengguna, nama, email, password) VALUES (2, 'Bob', 'bob@example.com', 'password456')")
-//
-//        db.execSQL("INSERT INTO $TABLE_TIKET (id_tiket, id_pengguna, id_jadwal, id_bangku, status_pembayaran) VALUES (1, 1, 1, 1, 'Paid')")
-//        db.execSQL("INSERT INTO $TABLE_TIKET (id_tiket, id_pengguna, id_jadwal, id_bangku, status_pembayaran) VALUES (2, 2, 2, 3, 'Unpaid')")
-//
-//        db.execSQL("INSERT INTO $TABLE_PEMBAYARAN (id_pembayaran, id_tiket, metode_pembayaran, status_pembayaran) VALUES (1, 1, 'Credit Card', 'Paid')")
-//        db.execSQL("INSERT INTO $TABLE_PEMBAYARAN (id_pembayaran, id_tiket, metode_pembayaran, status_pembayaran) VALUES (2, 2, 'Cash', 'Pending')")
-//
-//        db.execSQL("INSERT INTO $TABLE_RIWAYAT_PEMESANAN (id_riwayat, id_pengguna, id_tiket, waktu_pemesanan) VALUES (1, 1, 1, '2023-12-25 09:00:00')")
-//        db.execSQL("INSERT INTO $TABLE_RIWAYAT_PEMESANAN (id_riwayat, id_pengguna, id_tiket, waktu_pemesanan) VALUES (2, 2, 2, '2023-12-25 10:00:00')")
+
+        db.execSQL("INSERT INTO $TABLE_FILM (judul, genre, durasi, sinopsis, sutradara, tahun_rilis, umur_rating) VALUES ('Smile 2', 'Horror', 110, 'Saat akan memulai tur dunia baru, sensasi pop global Skye Riley mulai mengalami kejadian yang semakin mengerikan dan tidak dapat dijelaskan. Terbebani oleh kengerian yang meningkat dan tekanan ketenaran, Skye terpaksa menghadapi masa lalunya yang kelam untuk mendapatkan kembali kendali atas hidupnya sebelum menjadi tidak terkendali.', 'Parker Finn', 2024, 'R')")
+
+        db.execSQL("INSERT INTO $TABLE_FILM (judul, genre, durasi, sinopsis, sutradara, tahun_rilis, umur_rating) VALUES ('The Substance', 'Sci-Fi', 100, 'Seorang wanita pesohor yang tengah meredup neat mencoba sebuah obat dari pasar gelap, suatu zat pereplikasi sel tubuh yang dapat mewujudkan versi lebih muda dan lebih baik dirinya untuk sementara.', 'Coralie Fargeat', 2024, 'PG-13')")
+
+        db.execSQL("INSERT INTO $TABLE_FILM (judul, genre, durasi, sinopsis, sutradara, tahun_rilis, umur_rating) VALUES ('Tebusan Dosa', 'Drama', 125, 'Wening, seorang ibu mengalami kejadian tragis ketika Nirmala, ananya yang berusia 11 tahun, hilang dalam kecelakaan motor di sebuah jembatan.\n" +
+                "Kecelakaan itu juga merenggut nyawa Uti Yah, ibunda Wening. Wening merasa sangat berdosa karena membuat ibunya meninggal dan anakya hanyut di sungai, tapi dia percaya Nirmala masi hidup. Tirta, seorang perempuan kreator podcast misteri, berminat memviralkan tragisnya kehidupan Wening, namun bantuannya malah membuat Tirta menyibak rahasia gelap masa lalu Wening yang mengakibatkan hilangnya Nirmala.\n" +
+                "Dengan segala upaya dan penuh harapan, Wening mencari Nirmala, termasuk meminta bantuan Tetsuya, peneliti dari Jepang. Wening juga meminta bantuan Mbah Gowa, seorang dukun misterius. Namun, di tengah pencarian, Wening selalu didatangi oleh hantu Uti Yah. Akankah Wening bersatu lagi dengan Nirmala?', 'Yosep Anggi Noen', 2024, 'PG-13')")
+
+        db.execSQL("INSERT INTO $TABLE_FILM (judul, genre, durasi, sinopsis, sutradara, tahun_rilis, umur_rating) VALUES ('Taklee Genesis', 'Sci-Fi', 140, 'Stella, seorang ibu tunggal, kembali ke kampung halamannya bersama putrinya untuk merawat ibunya yang sakit. Terhantui ole hilangnya ayahnya yang misterius 30 tahun yang lalu, dia menemukan bahwa pemimpin komunitas dan putranya tidak tampak menua sedikit pun. Suatu malam, ayahnya menghubunginya melalui radio tua, mengungkapkan bahwa hanya 30 menit yang telah berlalu baginya. Untuk membawanya kembali, Stella harus melakukan perjalanan waktu dan mengaktifkan Taklee Genesis, memulai petualangan yang berlangsung selama seribu tahun.', 'Chukiat Sakweerakul', 2024, 'PG-13')")
+
+        db.execSQL("INSERT INTO $TABLE_FILM (judul, genre, durasi, sinopsis, sutradara, tahun_rilis, umur_rating) VALUES ('Petak Umpet', 'Horror', 95, 'Rahman (Randy Martin) diminta oleh sang Ibu untuk menemani Sari (Alesha Fadhillah Kurniawan) adikva bermain bersama teman sebayanya.\n" +
+                "Rahman yang merasa keberatan menyuruh Sari bermain petak umpet, sementara Rahman menunggui sambil bermain game online dari ponser. Masalah dimulai ketika Sari tak kunjung ditemukan. Teman-temannya bilang Sari bersembunyi di dalam rumah tua yang sudah lama tak dihuni. Konon katanya, Sari diculik oleh urban legend yang biasa menculik anak-anak, Wewe Gombel. Rahman yang merasa bersalah kemudian berniat memasuki rumah tua tempat Sari terakhir terlihat. la ditemani oleh dua sahabatnya, Rinto (Adam Farrel) dan Shila (Saskia Chadwick). Rumah tua tersebut rupanya memang sudah lama dikenal angker. Rahman dan kawan-kawan yang datang untuk menyelamatkan Sari sekarang malah menjadi orang yang perlu diselamatkan.\n', 'Rizal Mantovani', 2024, 'PG')")
+
+        db.execSQL("INSERT INTO $TABLE_FILM (judul, genre, durasi, sinopsis, sutradara, tahun_rilis, umur_rating) VALUES ('Heretic', 'Thriller', 105, 'Dua misionaris muda dipaksa untuk membuktikan iman mereka ketika mereka mengetuk pintu yang salah dan disambut oleh Tuan\n" +
+                "Reed yang jahat (Hugh Grant), terjebak dalam permainan kucing-dan-tikus yang mematikan.\n', 'Scott Beck, Bryan Woods', 2024, 'R')")
+        db.execSQL("INSERT INTO $TABLE_BIOSKOP (nama_bioskop, alamat, kapasitas) VALUES ('Bioskop XXI', 'Jl. Sudirman No.45', 150)")
+        db.execSQL("INSERT INTO $TABLE_BIOSKOP (nama_bioskop, alamat, kapasitas) VALUES ('Cinema 21', 'Jl. Thamrin No.21', 200)")
+        db.execSQL("INSERT INTO $TABLE_BIOSKOP (nama_bioskop, alamat, kapasitas) VALUES ('CGV Blitz', 'Jl. Gatot Subroto No.7', 180)")
+        db.execSQL("INSERT INTO $TABLE_BIOSKOP (nama_bioskop, alamat, kapasitas) VALUES ('IMAX Theatre', 'Jl. Merdeka No.10', 250)")
+
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 1, '2024-11-20 14:00:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (2, 1, '2024-11-20 16:00:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 2, '2024-11-21 18:30:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (3, 3, '2024-11-22 20:00:00')")
+
+    }
+
+    fun populateImage(context: Context){
+        MediaStoreHelper(context).addImageToMediaStore(R.drawable.smile_2_card, "smile_2_card.jpeg")
+        MediaStoreHelper(context).addImageToMediaStore(R.drawable.smile_2_carousel, "smile_2_carousel.jpeg")
+
+        MediaStoreHelper(context).addImageToMediaStore(R.drawable.tebusan_dosa_card, "tebusan_dosa_card.jpeg")
+        MediaStoreHelper(context).addImageToMediaStore(R.drawable.tebusan_dosa_carousel, "tebusan_dosa_carousel.jpeg")
     }
 
 }

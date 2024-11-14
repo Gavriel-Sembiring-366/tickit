@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_dashboard"
-        android:title="@string/title_dashboard" />
+        android:id="@+id/navigation_sinopsis"
+        android:title="@string/title_sinopsis" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_jadwal"
+        android:title="@string/title_jadwal" />
 </menu>

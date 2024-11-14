@@ -22,6 +22,9 @@ data class Film(
     @ColumnInfo(name = "sinopsis")
     val sinopsis: String? = null,
 
+    @ColumnInfo(name = "sutradara")
+    val sutradara: String? = null,
+
     @ColumnInfo(name = "tahun_rilis")
     val tahunRilis: Int? = null,
 

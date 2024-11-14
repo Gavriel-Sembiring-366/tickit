@@ -10,7 +10,7 @@ class FilmRepository(context: Context) {
     private val filmDatabase: FilmDatabase = Room.databaseBuilder(
         context.applicationContext,
         FilmDatabase::class.java,
-        "bioskop"
+        "slebew.db"
     ).build()
 
     init {

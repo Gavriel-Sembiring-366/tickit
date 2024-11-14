@@ -1,4 +1,4 @@
-package com.example.tickit.ui.dashboard
+package com.example.tickit.ui.sinopsis
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.example.tickit.entities.film.Film
 import com.example.tickit.entities.film.FilmRepository
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(private val repository: FilmRepository) : ViewModel() {
+class SinopsisViewModel(private val repository: FilmRepository) : ViewModel() {
 
     private val _data = MutableLiveData<Film?>()
     val data: LiveData<Film?> get() = _data // Expose as LiveData instead of MutableLiveData

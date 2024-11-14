@@ -19,10 +19,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(CREATE_TABLE_PEMBAYARAN)
         db.execSQL(CREATE_TABLE_RIWAYAT_PEMESANAN)
     }
-//    fun populateData(){
-//        val db = this.writableDatabase
-//        populatedata().populateMockData(db)
-//    }
+    fun populateData(){
+        val db = this.writableDatabase
+        populatedata().populateMockData(db)
+    }
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Drop older tables if existed
         db.execSQL("PRAGMA foreign_keys = ON")
@@ -39,7 +39,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     companion object {
         private const val DATABASE_VERSION = 1
-        private const val DATABASE_NAME = "bioskop"
+        private const val DATABASE_NAME = "slebew.db"
 
         // Table names
         const val TABLE_BIOSKOP = "bioskop"
@@ -59,11 +59,12 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "kapasitas INTEGER)")
 
         private const val CREATE_TABLE_FILM = ("CREATE TABLE $TABLE_FILM (" +
-                "id_film INTEGER PRIMARY KEY, " +
+                "id_film INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "judul TEXT, " +
                 "genre TEXT, " +
                 "durasi INTEGER, " +
                 "sinopsis TEXT, " +
+                "sutradara TEXT, " +
                 "tahun_rilis INTEGER, "+
                 "umur_rating TEXT)")
 
@@ -71,7 +72,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "id_jadwal INTEGER PRIMARY KEY, " +
                 "id_film INTEGER, " +
                 "id_bioskop INTEGER, " +
-                "waktu_tayang DATETIME, " +
+                "waktu_tayang TEXT, " +
                 "FOREIGN KEY(id_film) REFERENCES $TABLE_FILM(id_film), " +
                 "FOREIGN KEY(id_bioskop) REFERENCES $TABLE_BIOSKOP(id_bioskop))")
 

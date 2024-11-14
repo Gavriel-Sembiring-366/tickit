@@ -22,8 +22,8 @@ interface FilmDao {
     suspend fun getAllFilms(): List<Film>
 
     // Get a single film by its ID
-    @Query("SELECT * FROM film WHERE id_film = :id")
-    suspend fun getFilmById(id: Int): Film?
+    @Query("SELECT * FROM film WHERE id_film = :idFilm")
+    suspend fun getFilmById(idFilm: Int): Film?
 
     // Get films by genre
     @Query("SELECT * FROM film WHERE genre = :genre")

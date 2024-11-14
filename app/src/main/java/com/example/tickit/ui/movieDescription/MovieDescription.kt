@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.tickit.R
+import com.example.tickit.database.MediaStoreHelper
 
 
 class MovieDescription : Fragment() {
@@ -22,6 +23,8 @@ class MovieDescription : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_movie_description, container, false)
     }
+
+
 
 
 }

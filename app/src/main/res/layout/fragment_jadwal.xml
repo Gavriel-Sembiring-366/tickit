@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="10dp"
     android:background="@color/white"
-    tools:context=".ui.notifications.NotificationsFragment">
+    tools:context=".ui.jadwal.JadwalFragment">
 
     <TextView
-        android:id="@+id/text_notifications"
+        android:id="@+id/text_jadwal"
         android:layout_width="match_parent"
         android:layout_height="700dp"
         android:layout_marginStart="8dp"

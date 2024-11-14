@@ -1,6 +1,7 @@
 package com.example.tickit
 
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,8 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.tickit.database.DBHelper
+import com.example.tickit.database.MediaStoreHelper
+import com.example.tickit.database.populatedata
 import com.example.tickit.databinding.ActivityMovieDetailBinding
+import com.example.tickit.entities.film.FilmDatabase
 import com.example.tickit.entities.film.FilmRepository
+import com.example.tickit.entities.jadwal.JadwalDatabase
 
 class MovieDetail : AppCompatActivity() {
 
@@ -30,19 +35,46 @@ class MovieDetail : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_movie_detail)
         navView.setupWithNavController(navController)
 
-        val dbHelper = DBHelper(this, null)
 
+
+
+        val filmDatabase = FilmDatabase.getInstance(this)
+        val filmDao = filmDatabase.filmDao()
+
+        val jadwalDatabase = JadwalDatabase.getInstance(this)
+        val jadwalDao = jadwalDatabase.jadwalDao()
+
+
+        val dbHelper = DBHelper(this, null)
+        val db = dbHelper.writableDatabase
+//        dbHelper.onCreate(db)
+        populatedata().populateImage(this)
         viewModel.getFilmById(1)
+
         viewModel.data.observe(this) { film ->
             if (film != null) {
-                findViewById<TextView>(R.id.judul_film).text = film.judul?.uppercase() ?: ""
-                findViewById<TextView>(R.id.genre_film).text = film.genre?: ""
-                findViewById<TextView>(R.id.durasi_film).text = buildString {
+                binding.judulFilm.text = film.judul?.uppercase() ?: ""
+                binding.genreFilm.text = film.genre?: ""
+                binding.durasiFilm.text = buildString {
                     append(film.durasi.toString())
                     append(" menit")
                 }
-                findViewById<TextView>(R.id.tahun_rilis_film).text = film.tahunRilis.toString()
-                findViewById<TextView>(R.id.umur_rating_film).text = film.umurRating ?: ""
+                binding.tahunRilisFilm.text = film.tahunRilis.toString()
+                binding.umurRatingFilm.text = film.umurRating ?: ""
+
+
+                val imageCarousel = (film.judul?.lowercase()?.replace(" ", "_") ?: "") + "_carousel.jpeg"
+                val imageCarouselBitmap = MediaStoreHelper(this).getImageFromMediaStore(imageCarousel)
+                imageCarouselBitmap?.let {
+                    binding.moviePoster.setImageBitmap(it)
+                }
+
+                val imageCard = (film.judul?.lowercase()?.replace(" ", "_") ?: "") + "_card.jpeg"
+                val imageCardBitmap = MediaStoreHelper(this).getImageFromMediaStore(imageCard)
+                imageCardBitmap?.let {
+                    binding.movieCardImage.setImageBitmap(it)
+                }
+
             }
         }
 
