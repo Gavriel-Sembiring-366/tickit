@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation (libs.androidx.room.runtime)
+    implementation(libs.androidx.ui.desktop)
     kapt (libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

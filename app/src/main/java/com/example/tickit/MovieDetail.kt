@@ -15,9 +15,7 @@ import com.example.tickit.database.DBHelper
 import com.example.tickit.database.MediaStoreHelper
 import com.example.tickit.database.populatedata
 import com.example.tickit.databinding.ActivityMovieDetailBinding
-import com.example.tickit.entities.film.FilmDatabase
 import com.example.tickit.entities.film.FilmRepository
-import com.example.tickit.entities.jadwal.JadwalDatabase
 
 class MovieDetail : AppCompatActivity() {
 
@@ -38,16 +36,11 @@ class MovieDetail : AppCompatActivity() {
 
 
 
-        val filmDatabase = FilmDatabase.getInstance(this)
-        val filmDao = filmDatabase.filmDao()
-
-        val jadwalDatabase = JadwalDatabase.getInstance(this)
-        val jadwalDao = jadwalDatabase.jadwalDao()
-
 
         val dbHelper = DBHelper(this, null)
         val db = dbHelper.writableDatabase
 //        dbHelper.onCreate(db)
+        populatedata().populateMockData(db)
         populatedata().populateImage(this)
         viewModel.getFilmById(1)
 
@@ -60,7 +53,7 @@ class MovieDetail : AppCompatActivity() {
                     append(" menit")
                 }
                 binding.tahunRilisFilm.text = film.tahunRilis.toString()
-                binding.umurRatingFilm.text = film.umurRating ?: ""
+//                binding.umurRatingFilm.text = film.umurRating ?: ""
 
 
                 val imageCarousel = (film.judul?.lowercase()?.replace(" ", "_") ?: "") + "_carousel.jpeg"

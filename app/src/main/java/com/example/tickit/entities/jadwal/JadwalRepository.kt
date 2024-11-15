@@ -2,20 +2,17 @@ package com.example.tickit.entities.jadwal
 import android.content.Context
 import androidx.room.Room
 import com.example.tickit.database.DBHelper
+import com.example.tickit.database.TickItDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class JadwalRepository(context: Context) {
 
     private val jadwalDao: JadwalDao
-    private val jadwalDatabase: JadwalDatabase = Room.databaseBuilder(
-        context.applicationContext,
-        JadwalDatabase::class.java,
-        "slebew.db"
-    ).build()
+    private val db = TickItDatabase.getDatabase(context)
 
     init {
-        jadwalDao = jadwalDatabase.jadwalDao()
+        jadwalDao = db.jadwalDao()
     }
 
     // Insert a new jadwal into the database

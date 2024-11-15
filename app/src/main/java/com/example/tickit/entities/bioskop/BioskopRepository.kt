@@ -1,20 +1,16 @@
 package com.example.tickit.entities.bioskop
 import android.content.Context
-import androidx.room.Room
+import com.example.tickit.database.TickItDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class BioskopRepository(context: Context) {
 
     private val bioskopDao: BioskopDao
-    private val bioskopDatabase: BioskopDatabase = Room.databaseBuilder(
-        context.applicationContext,
-        BioskopDatabase::class.java,
-        "slebew.db"
-    ).build()
+    private val db = TickItDatabase.getDatabase(context)
 
     init {
-        bioskopDao = bioskopDatabase.bioskopDao()
+        bioskopDao = db.bioskopDao()
     }
 
     // Insert a new bioskop into the database

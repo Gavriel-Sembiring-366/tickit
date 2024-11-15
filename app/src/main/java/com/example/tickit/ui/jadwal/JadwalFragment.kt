@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.tickit.databinding.FragmentJadwalBinding
-import com.example.tickit.entities.jadwal.JadwalDatabase
 import com.example.tickit.entities.jadwal.JadwalRepository
 
 class JadwalFragment : Fragment() {
@@ -31,17 +30,14 @@ class JadwalFragment : Fragment() {
         _binding = FragmentJadwalBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val jadwalDatabase = JadwalDatabase.getInstance(requireContext())
-        val jadwalDao = jadwalDatabase.jadwalDao()
-
         viewModel.getJadwalByFilm(1)
         viewModel.data.observe(viewLifecycleOwner) { jadwal ->
-//            if (jadwal != null && jadwal.isNotEmpty()) {
-//                val waktuTayangList = jadwal.joinToString(separator = "\n") { it.waktuTayang.toString() }
-//                binding.textJadwal.text = waktuTayangList
-//            } else {
-//                binding.textJadwal.text = "No schedule available"
-//            }
+            if (jadwal != null && jadwal.isNotEmpty()) {
+                val waktuTayangList = jadwal.joinToString(separator = "\n") { it.waktuTayang.toString() }
+                binding.textJadwal.text = waktuTayangList
+            } else {
+                binding.textJadwal.text = "No schedule available"
+            }
         }
         return root
     }

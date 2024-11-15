@@ -1,20 +1,17 @@
 package com.example.tickit.entities.film
 import android.content.Context
 import androidx.room.Room
+import com.example.tickit.database.TickItDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FilmRepository(context: Context) {
 
     private val filmDao: FilmDao
-    private val filmDatabase: FilmDatabase = Room.databaseBuilder(
-        context.applicationContext,
-        FilmDatabase::class.java,
-        "slebew.db"
-    ).build()
+    private val db = TickItDatabase.getDatabase(context)
 
     init {
-        filmDao = filmDatabase.filmDao()
+        filmDao = db.filmDao()
     }
 
     // Insert a new film into the database
