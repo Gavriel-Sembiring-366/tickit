@@ -50,7 +50,7 @@ class MovieDetail : AppCompatActivity() {
                 binding.genreFilm.text = film.genre?: ""
                 binding.durasiFilm.text = buildString {
                     append(film.durasi.toString())
-                    append(" menit")
+                    append(" menit euy")
                 }
                 binding.tahunRilisFilm.text = film.tahunRilis.toString()
 //                binding.umurRatingFilm.text = film.umurRating ?: ""
