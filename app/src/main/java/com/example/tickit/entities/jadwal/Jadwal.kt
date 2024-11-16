@@ -1,13 +1,11 @@
 package com.example.tickit.entities.jadwal
 
-
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ColumnInfo
 import androidx.room.ForeignKey
 import com.example.tickit.entities.bioskop.Bioskop
 import com.example.tickit.entities.film.Film
-import java.util.Date
 
 @Entity(
     tableName = "jadwal",

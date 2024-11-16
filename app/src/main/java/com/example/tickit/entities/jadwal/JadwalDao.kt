@@ -28,4 +28,7 @@ interface JadwalDao {
     // Get films by id_film
     @Query("SELECT * FROM jadwal WHERE id_film = :idFilm")
     suspend fun getJadwalByFilm(idFilm: Int): List<Jadwal>
+
+    @Query("SELECT * FROM jadwal WHERE id_film = :idFilm AND id_bioskop = :idBioskop")
+    suspend fun getJadwalByFilmAndBioskop(idFilm: Int, idBioskop: Int): List<Jadwal>
 }

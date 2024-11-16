@@ -9,45 +9,19 @@
     android:background="@color/white"
     tools:context=".ui.jadwal.JadwalFragment">
 
-    <TextView
-        android:id="@+id/text_jadwal"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/day_container"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/parented_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:layout_marginTop="100dp"-->
-<!--        android:paddingTop="20dp"-->
-<!--        android:paddingHorizontal="10dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:background="@drawable/rounded_background">-->
+    <LinearLayout
+        android:id="@+id/bioskop_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/day_container"
+        android:orientation="vertical" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/imageView"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="100dp"-->
-<!--            android:background="@color/purple_700"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/parented_layout"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/parented_layout"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/parented_layout"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/parented_layout"-->
-<!--            app:layout_constraintHorizontal_bias="0.0"-->
-<!--            app:layout_constraintVertical_bias="0.0" />-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

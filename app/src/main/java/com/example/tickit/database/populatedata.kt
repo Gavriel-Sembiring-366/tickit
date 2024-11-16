@@ -35,10 +35,14 @@ class populatedata {
         db.execSQL("INSERT INTO $TABLE_BIOSKOP (nama_bioskop, alamat, kapasitas) VALUES ('CGV Blitz', 'Jl. Gatot Subroto No.7', 180)")
         db.execSQL("INSERT INTO $TABLE_BIOSKOP (nama_bioskop, alamat, kapasitas) VALUES ('IMAX Theatre', 'Jl. Merdeka No.10', 250)")
 
-        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 1, '2024-11-20 14:00:00')")
-        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (2, 1, '2024-11-20 16:00:00')")
-        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 2, '2024-11-21 18:30:00')")
-        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (3, 3, '2024-11-22 20:00:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 1, '2024-11-21 14:00:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 1, '2024-11-21 16:30:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 1, '2024-11-21 19:00:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 1, '2024-11-21 21:30:00')")
+
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 2, '2024-11-22 16:00:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 2, '2024-11-23 18:30:00')")
+        db.execSQL("INSERT INTO $TABLE_JADWAL (id_film, id_bioskop, waktu_tayang) VALUES (1, 2, '2024-11-24 20:00:00')")
 
     }
 

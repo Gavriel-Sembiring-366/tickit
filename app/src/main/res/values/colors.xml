@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="blue">#2E2EF8</color>
     <color name="ongoing_movie_bg_tint">#000000</color>
     <color name="carousel_background_color">#50FFFFFF</color>
 </resources>

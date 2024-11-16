@@ -3,16 +3,19 @@ import android.content.Context
 import androidx.room.Room
 import com.example.tickit.database.DBHelper
 import com.example.tickit.database.TickItDatabase
+import com.example.tickit.entities.bioskop.BioskopDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class JadwalRepository(context: Context) {
 
     private val jadwalDao: JadwalDao
+    private val bioskopDao: BioskopDao
     private val db = TickItDatabase.getDatabase(context)
 
     init {
         jadwalDao = db.jadwalDao()
+        bioskopDao = db.bioskopDao()
     }
 
     // Insert a new jadwal into the database
@@ -40,4 +43,12 @@ class JadwalRepository(context: Context) {
         jadwalDao.getJadwalByFilm(id)
     }
 
+    suspend fun getJadwalByFilmAndBioskop(id_film: Int, id_bioskop: Int): List<Jadwal> = withContext(Dispatchers.IO) {
+        jadwalDao.getJadwalByFilmAndBioskop(id_film, id_bioskop)
+    }
+
+    suspend fun getNamaBioskop(idBioskop: Int): String {
+        val bioskop = bioskopDao.getBioskopById(idBioskop)
+        return bioskop?.namaBioskop ?: "Unknown Bioskop"
+    }
 }
