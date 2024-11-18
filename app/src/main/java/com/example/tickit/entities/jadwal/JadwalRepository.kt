@@ -47,7 +47,7 @@ class JadwalRepository(context: Context) {
         jadwalDao.getJadwalByFilmAndBioskop(id_film, id_bioskop)
     }
 
-    suspend fun getNamaBioskop(idBioskop: Int): String {
+    suspend fun getBioskopById(idBioskop: Int): String {
         val bioskop = bioskopDao.getBioskopById(idBioskop)
         return bioskop?.namaBioskop ?: "Unknown Bioskop"
     }

@@ -32,16 +32,12 @@ class MovieDetail : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment_activity_movie_detail)
         navView.setupWithNavController(navController)
-
-
-
-
-
-        val dbHelper = DBHelper(this, null)
-        val db = dbHelper.writableDatabase
-//        dbHelper.onCreate(db)
-        populatedata().populateMockData(db)
-        populatedata().populateImage(this)
+//
+//        val dbHelper = DBHelper(this, null)
+//        val db = dbHelper.writableDatabase
+////        dbHelper.onCreate(db)
+//        populatedata().populateMockData(db)
+//        populatedata().populateImage(this)
         viewModel.getFilmById(1)
 
         viewModel.data.observe(this) { film ->
@@ -53,7 +49,7 @@ class MovieDetail : AppCompatActivity() {
                     append(" menit euy")
                 }
                 binding.tahunRilisFilm.text = film.tahunRilis.toString()
-//                binding.umurRatingFilm.text = film.umurRating ?: ""
+                binding.umurRatingFilm.text = film.umurRating ?: ""
 
 
                 val imageCarousel = (film.judul?.lowercase()?.replace(" ", "_") ?: "") + "_carousel.jpeg"
