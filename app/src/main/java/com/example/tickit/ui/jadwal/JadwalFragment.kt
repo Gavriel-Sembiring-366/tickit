@@ -12,8 +12,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,9 +26,6 @@ import com.example.tickit.entities.jadwal.JadwalRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.Locale
-import androidx.lifecycle.lifecycleScope
 class JadwalFragment : Fragment() {
 
     private var _binding: FragmentJadwalBinding? = null
@@ -64,7 +63,6 @@ class JadwalFragment : Fragment() {
                     val schedulesForDay = groupedByDate[selectedDate] ?: emptyList()
 
                     val groupedByBioskop = schedulesForDay.groupBy { it.idBioskop }
-
                     lifecycleScope.launch {
                         groupedByBioskop.forEach { (idBioskop, schedules) ->
 
@@ -78,45 +76,99 @@ class JadwalFragment : Fragment() {
                             }
                             binding.bioskopContainer.addView(bioskopNameTextView)
 
-                            val bioskopGridLayout = GridLayout(requireContext()).apply {
-                                layoutParams = LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                                )
-
-                                columnCount = 4 // Adjust as needed
-                                setPadding(4, 4, 4, 4)
-                            }
 
                             schedules.forEach { schedule ->
+                                // Create a new buttonLayout for each schedule
+                                val buttonLayout = ConstraintLayout(requireContext()).apply {
+                                    layoutParams = ConstraintLayout.LayoutParams(
+                                        ConstraintLayout.LayoutParams.MATCH_PARENT,
+                                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                                    ).apply { setMargins(4, 0, 4, 20) }
+                                }
+
                                 val time = LocalDateTime.parse(
                                     schedule.waktuTayang,
                                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                                 ).toLocalTime()
 
-                                val timeButton = Button(requireContext()).apply {
+                                // Create buttons dynamically
+                                val leftTimeButton = Button(requireContext()).apply {
+                                    id = View.generateViewId()
                                     text = time.toString()
-                                    textSize = 14f
+                                    textSize = 12f
                                     setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                                    setPadding(8, 4, 8, 4)
-                                    layoutParams = GridLayout.LayoutParams().apply {
-                                        setMargins(4, 4, 4, 4)
-                                    }
-
                                     background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white))
+                                    layoutParams = LinearLayout.LayoutParams(
+                                        150,
+                                        100
+                                    )
                                     setOnClickListener {
-                                        val toastMessage = "You clicked $namaBioskop at $text"
+                                        val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
                                         Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
                                     }
                                 }
-                                bioskopGridLayout.addView(timeButton)
+
+                                val centerTimeButton = Button(requireContext()).apply {
+                                    id = View.generateViewId()
+                                    text = time.toString()
+                                    textSize = 12f
+                                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                                    background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white))
+                                    layoutParams = LinearLayout.LayoutParams(
+                                        150,
+                                        100
+                                    )
+                                    setOnClickListener {
+                                        val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
+                                        Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                val rightTimeButton = Button(requireContext()).apply {
+                                    id = View.generateViewId()
+                                    text = time.toString()
+                                    textSize = 12f
+                                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                                    background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white))
+                                    layoutParams = LinearLayout.LayoutParams(
+                                        150,
+                                        100
+                                    )
+                                    setOnClickListener {
+                                        val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
+                                        Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                buttonLayout.addView(leftTimeButton)
+                                buttonLayout.addView(centerTimeButton)
+                                buttonLayout.addView(rightTimeButton)
+
+                                ConstraintSet().apply {
+                                    clone(buttonLayout)
+
+                                    connect(leftTimeButton.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                                    connect(leftTimeButton.id, ConstraintSet.END, centerTimeButton.id, ConstraintSet.START)
+
+                                    connect(centerTimeButton.id, ConstraintSet.START, leftTimeButton.id, ConstraintSet.END)
+                                    connect(centerTimeButton.id, ConstraintSet.END, rightTimeButton.id, ConstraintSet.START)
+
+                                    connect(rightTimeButton.id, ConstraintSet.START, centerTimeButton.id, ConstraintSet.END)
+                                    connect(rightTimeButton.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+
+                                    setHorizontalWeight(leftTimeButton.id, 1f)
+                                    setHorizontalWeight(centerTimeButton.id, 1f)
+                                    setHorizontalWeight(rightTimeButton.id, 1f)
+
+                                    applyTo(buttonLayout)
+                                }
+
+                                // Add the newly created buttonLayout to bioskopContainer
+                                binding.bioskopContainer.addView(buttonLayout)
                             }
 
-                            binding.bioskopContainer.addView(bioskopGridLayout)
                         }
                     }
-
-
                 }
                 binding.dayContainer.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 binding.dayContainer.adapter = dayButtonsAdapter

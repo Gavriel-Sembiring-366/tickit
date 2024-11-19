@@ -6,23 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="10dp"
+    android:paddingBottom="360dp"
     android:background="@color/white"
     tools:context=".ui.jadwal.JadwalFragment">
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:fillViewport="false">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:id="@+id/content_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -37,6 +34,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

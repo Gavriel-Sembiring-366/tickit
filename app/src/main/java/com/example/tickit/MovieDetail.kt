@@ -32,12 +32,11 @@ class MovieDetail : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment_activity_movie_detail)
         navView.setupWithNavController(navController)
-//
+
 //        val dbHelper = DBHelper(this, null)
 //        val db = dbHelper.writableDatabase
-////        dbHelper.onCreate(db)
 //        populatedata().populateMockData(db)
-//        populatedata().populateImage(this)
+        populatedata().populateImage(this)
         viewModel.getFilmById(1)
 
         viewModel.data.observe(this) { film ->

@@ -13,10 +13,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-class DayButtonAdapter(
-    private val days: List<LocalDate>,
-    private val onDayClick: (LocalDate) -> Unit
-) : RecyclerView.Adapter<DayButtonAdapter.DayButtonViewHolder>() {
+class DayButtonAdapter(private val days: List<LocalDate>, private val onDayClick: (LocalDate) -> Unit) : RecyclerView.Adapter<DayButtonAdapter.DayButtonViewHolder>() {
     private var currentlyActiveButton: Button? = null
     inner class DayButtonViewHolder(val button: Button) : RecyclerView.ViewHolder(button)
 
