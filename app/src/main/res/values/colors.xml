@@ -8,5 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ongoing_movie_bg_tint">#000000</color>
+    <color name="blue">#2B4B82</color>
+    <color name="pink">#F7B4A7</color>
     <color name="carousel_background_color">#50FFFFFF</color>
 </resources>
