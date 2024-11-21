@@ -15,7 +15,7 @@
         android:id="@+id/navigation_sinopsis"
         android:name="com.example.tickit.ui.sinopsis.SinopsisFragment"
         android:label="@string/title_sinopsis"
-        tools:layout="@layout/fragment_sinopsis" />
+        tools:layout="@layout/fragment_daftar_sukses" />
 
 
 </navigation>
