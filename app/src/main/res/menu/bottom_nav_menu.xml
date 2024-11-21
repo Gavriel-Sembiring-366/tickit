@@ -6,15 +6,4 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
 
-    <item
-        android:id="@+id/navigation_sinopsis"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_sinopsis" />
-
-    <item
-        android:id="@+id/navigation_jadwal"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_jadwal" />
-
-
 </menu>
