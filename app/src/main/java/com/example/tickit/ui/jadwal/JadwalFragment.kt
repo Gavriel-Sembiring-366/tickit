@@ -1,6 +1,6 @@
 package com.example.tickit.ui.jadwal
 
-import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tickit.R
 import com.example.tickit.databinding.FragmentJadwalBinding
+import com.example.tickit.entities.jadwal.Jadwal
 import com.example.tickit.entities.jadwal.JadwalRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -31,16 +32,11 @@ class JadwalFragment : Fragment() {
     private var _binding: FragmentJadwalBinding? = null
     private val repository by lazy { JadwalRepository(requireContext()) }
     private val viewModel: JadwalViewModel by viewModels { JadwalViewModelFactory(repository) }
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
-
         inflater: LayoutInflater,
-
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -50,141 +46,166 @@ class JadwalFragment : Fragment() {
         viewModel.getJadwalByFilm(1)
 
         viewModel.data.observe(viewLifecycleOwner) { jadwal ->
-            if (jadwal != null && jadwal.isNotEmpty()) {
-                // Group schedules by day
-                val groupedByDate = jadwal.groupBy {
-                    val dateTime = LocalDateTime.parse(it.waktuTayang, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                    dateTime.toLocalDate()
-                }
-
-                val dayButtonsAdapter = DayButtonAdapter(groupedByDate.keys.toList()) { selectedDate ->
-                    binding.bioskopContainer.removeAllViews()
-
-                    val schedulesForDay = groupedByDate[selectedDate] ?: emptyList()
-
-                    val groupedByBioskop = schedulesForDay.groupBy { it.idBioskop }
-                    lifecycleScope.launch {
-                        groupedByBioskop.forEach { (idBioskop, schedules) ->
-
-                            val namaBioskop = repository.getBioskopById(idBioskop!!) ?: "Unknown Bioskop"
-
-                            val bioskopNameTextView = TextView(requireContext()).apply {
-                                text = namaBioskop
-                                textSize = 18f
-                                setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                                setPadding(8, 8, 8, 8)
-                            }
-                            binding.bioskopContainer.addView(bioskopNameTextView)
-
-
-                            schedules.forEach { schedule ->
-                                // Create a new buttonLayout for each schedule
-                                val buttonLayout = ConstraintLayout(requireContext()).apply {
-                                    layoutParams = ConstraintLayout.LayoutParams(
-                                        ConstraintLayout.LayoutParams.MATCH_PARENT,
-                                        ConstraintLayout.LayoutParams.WRAP_CONTENT
-                                    ).apply { setMargins(4, 0, 4, 20) }
-                                }
-
-                                val time = LocalDateTime.parse(
-                                    schedule.waktuTayang,
-                                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                ).toLocalTime()
-
-                                // Create buttons dynamically
-                                val leftTimeButton = Button(requireContext()).apply {
-                                    id = View.generateViewId()
-                                    text = time.toString()
-                                    textSize = 12f
-                                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                                    background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white))
-                                    layoutParams = LinearLayout.LayoutParams(
-                                        150,
-                                        100
-                                    )
-                                    setOnClickListener {
-                                        val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
-                                        Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-
-                                val centerTimeButton = Button(requireContext()).apply {
-                                    id = View.generateViewId()
-                                    text = time.toString()
-                                    textSize = 12f
-                                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                                    background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white))
-                                    layoutParams = LinearLayout.LayoutParams(
-                                        150,
-                                        100
-                                    )
-                                    setOnClickListener {
-                                        val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
-                                        Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-
-                                val rightTimeButton = Button(requireContext()).apply {
-                                    id = View.generateViewId()
-                                    text = time.toString()
-                                    textSize = 12f
-                                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                                    background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white))
-                                    layoutParams = LinearLayout.LayoutParams(
-                                        150,
-                                        100
-                                    )
-                                    setOnClickListener {
-                                        val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
-                                        Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-
-                                buttonLayout.addView(leftTimeButton)
-                                buttonLayout.addView(centerTimeButton)
-                                buttonLayout.addView(rightTimeButton)
-
-                                ConstraintSet().apply {
-                                    clone(buttonLayout)
-
-                                    connect(leftTimeButton.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-                                    connect(leftTimeButton.id, ConstraintSet.END, centerTimeButton.id, ConstraintSet.START)
-
-                                    connect(centerTimeButton.id, ConstraintSet.START, leftTimeButton.id, ConstraintSet.END)
-                                    connect(centerTimeButton.id, ConstraintSet.END, rightTimeButton.id, ConstraintSet.START)
-
-                                    connect(rightTimeButton.id, ConstraintSet.START, centerTimeButton.id, ConstraintSet.END)
-                                    connect(rightTimeButton.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-
-                                    setHorizontalWeight(leftTimeButton.id, 1f)
-                                    setHorizontalWeight(centerTimeButton.id, 1f)
-                                    setHorizontalWeight(rightTimeButton.id, 1f)
-
-                                    applyTo(buttonLayout)
-                                }
-
-                                // Add the newly created buttonLayout to bioskopContainer
-                                binding.bioskopContainer.addView(buttonLayout)
-                            }
-
-                        }
-                    }
-                }
-                binding.dayContainer.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                binding.dayContainer.adapter = dayButtonsAdapter
+            if (!jadwal.isNullOrEmpty()) {
+                setupScheduleView(jadwal)
             } else {
-                val textView = TextView(requireContext()).apply {
-                    text = "No schedule available"
-                    textSize = 16f
-                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                }
-                binding.bioskopContainer.addView(textView)
+                displayNoScheduleMessage()
             }
         }
 
         return root
     }
 
+    private fun displayNoScheduleMessage() {
+        val textView = TextView(requireContext()).apply {
+            text = "No schedule available"
+            textSize = 16f
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        binding.bioskopContainer.addView(textView)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupScheduleView(jadwal: List<Jadwal>) {
+        val groupedByDate = jadwal.groupBy {
+            LocalDateTime.parse(it.waktuTayang, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toLocalDate()
+        }
+
+        val dayButtonsAdapter = DayButtonAdapter(groupedByDate.keys.toList()) { selectedDate ->
+            binding.bioskopContainer.removeAllViews()
+            val schedulesForDay = groupedByDate[selectedDate] ?: emptyList()
+            displaySchedulesForDay(schedulesForDay)
+        }
+
+        binding.dayContainer.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = dayButtonsAdapter
+        }
+    }
+
+    private fun addBioskopHeader(namaBioskop: String) {
+        val bioskopNameTextView = TextView(requireContext()).apply {
+            text = namaBioskop
+            textSize = 18f
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            setPadding(8, 8, 8, 8)
+        }
+        binding.bioskopContainer.addView(bioskopNameTextView)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun displaySchedulesForDay(schedulesForDay: List<Jadwal>) {
+        val groupedByBioskop = schedulesForDay.groupBy { it.idBioskop }
+
+        lifecycleScope.launch {
+            groupedByBioskop.forEach { (idBioskop, schedules) ->
+                val namaBioskop = repository.getBioskopById(idBioskop!!) ?: "Unknown Bioskop"
+
+                // Create a ConstraintLayout
+                val constraintLayout = ConstraintLayout(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setPadding(10,5,10,25)
+                        setMargins(0,0,0,50)
+                        setBackgroundResource(R.drawable.rounded_bottom_shadow)
+                    }
+                }
+
+                // Add TextView for bioskop name
+                val bioskopNameTextView = TextView(requireContext()).apply {
+                    id = View.generateViewId()
+                    text = namaBioskop
+                    textSize = 18f
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    setPadding(20, 8, 8, 8)
+
+                }
+                constraintLayout.addView(bioskopNameTextView)
+
+                // Create a GridLayout with 5 columns
+                val gridLayout = GridLayout(requireContext()).apply {
+                    id = View.generateViewId()
+                    layoutParams = ConstraintLayout.LayoutParams(
+                        ConstraintLayout.LayoutParams.MATCH_PARENT,
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    columnCount = 5
+
+                }
+
+                // Add buttons to the GridLayout
+                schedules.forEach { schedule ->
+                    gridLayout.addView(createScheduleButtons(schedule, namaBioskop))
+                }
+                constraintLayout.addView(gridLayout)
+
+                // Set constraints for the TextView and GridLayout
+                ConstraintSet().apply {
+                    clone(constraintLayout)
+
+                    // Constraints for TextView
+                    connect(
+                        bioskopNameTextView.id, ConstraintSet.TOP,
+                        ConstraintSet.PARENT_ID, ConstraintSet.TOP
+                    )
+                    connect(
+                        bioskopNameTextView.id, ConstraintSet.START,
+                        ConstraintSet.PARENT_ID, ConstraintSet.START
+                    )
+
+                    // Constraints for GridLayout
+                    connect(
+                        gridLayout.id, ConstraintSet.TOP,
+                        bioskopNameTextView.id, ConstraintSet.BOTTOM
+                    )
+                    connect(
+                        gridLayout.id, ConstraintSet.START,
+                        ConstraintSet.PARENT_ID, ConstraintSet.START
+                    )
+                    connect(
+                        gridLayout.id, ConstraintSet.END,
+                        ConstraintSet.PARENT_ID, ConstraintSet.END
+                    )
+
+                    applyTo(constraintLayout)
+                }
+
+                // Add the ConstraintLayout to the parent container
+                binding.bioskopContainer.addView(constraintLayout)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createScheduleButtons(schedule: Jadwal, namaBioskop: String): Button {
+        val time = LocalDateTime.parse(schedule.waktuTayang, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toLocalTime()
+
+        return Button(requireContext()).apply {
+            text = time.toString()
+            textSize = 14f
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
+            val borderDrawable = GradientDrawable().apply {
+                setStroke(3, ContextCompat.getColor(requireContext(), R.color.black))
+                cornerRadius = 8f * context.resources.displayMetrics.density
+            }
+            background = borderDrawable
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = 0
+                height = LinearLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f) // Span one column
+                rowSpec = GridLayout.spec(GridLayout.UNDEFINED)
+                setMargins(8) // Optional: Adjust margin
+            }
+
+            setOnClickListener {
+                val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
+                Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,7 +1,5 @@
 package com.example.tickit.entities.jadwal
 import android.content.Context
-import androidx.room.Room
-import com.example.tickit.database.DBHelper
 import com.example.tickit.database.TickItDatabase
 import com.example.tickit.entities.bioskop.BioskopDao
 import kotlinx.coroutines.Dispatchers

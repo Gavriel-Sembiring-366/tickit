@@ -43,4 +43,9 @@ class FilmRepository(context: Context) {
     suspend fun getFilmsByGenre(genre: String): List<Film> = withContext(Dispatchers.IO) {
         filmDao.getFilmsByGenre(genre)
     }
+
+    suspend fun getFilmsByIds(ids: List<Int>): List<Film> = withContext(Dispatchers.IO) {
+        filmDao.getFilmsByIds(ids)
+    }
+
 }

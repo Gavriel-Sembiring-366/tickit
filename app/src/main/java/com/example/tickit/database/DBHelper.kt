@@ -18,6 +18,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(CREATE_TABLE_TIKET)
         db.execSQL(CREATE_TABLE_PEMBAYARAN)
         db.execSQL(CREATE_TABLE_RIWAYAT_PEMESANAN)
+        db.execSQL(CREATE_TABLE_BANGKU_DIPESAN)
+        db.execSQL(CREATE_TABLE_BANGKU_TERPAKAI)
     }
     fun populateData(){
         val db = this.writableDatabase
@@ -34,6 +36,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("DROP TABLE IF EXISTS $TABLE_TIKET")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PEMBAYARAN")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RIWAYAT_PEMESANAN")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_BANGKU_DIPESAN")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_BANGKU_TERPAKAI")
         onCreate(db)
     }
 
@@ -50,8 +54,26 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         const val TABLE_TIKET = "tiket"
         const val TABLE_PEMBAYARAN = "pembayaran"
         const val TABLE_RIWAYAT_PEMESANAN = "riwayat_pemesanan"
+        const val TABLE_BANGKU_DIPESAN = "bangku_dipesan"
+        const val TABLE_BANGKU_TERPAKAI = "bangku_terpakai"
 
         // Create table statements
+
+        private const val CREATE_TABLE_BANGKU_DIPESAN = ("CREATE TABLE $TABLE_BANGKU_DIPESAN (" +
+                "id_bangku_dipesan INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id_jadwal INTEGER," +
+                "id_bangku INTEGER, " +
+                "FOREIGN KEY(id_jadwal) REFERENCES $TABLE_JADWAL(id_jadwal)," +
+                "FOREIGN KEY(id_bangku) REFERENCES $TABLE_JADWAL(id_bangku))")
+
+
+        private const val CREATE_TABLE_BANGKU_TERPAKAI = ("CREATE TABLE $TABLE_BANGKU_TERPAKAI (" +
+                "id_bangku_terpakai INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id_jadwal INTEGER," +
+                "id_bangku INTEGER, " +
+                "FOREIGN KEY(id_jadwal) REFERENCES $TABLE_JADWAL(id_jadwal)," +
+                "FOREIGN KEY(id_bangku) REFERENCES $TABLE_JADWAL(id_bangku))")
+
         private const val CREATE_TABLE_BIOSKOP = ("CREATE TABLE $TABLE_BIOSKOP (" +
                 "id_bioskop INTEGER PRIMARY KEY, " +
                 "nama_bioskop TEXT, " +
@@ -77,10 +99,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "FOREIGN KEY(id_bioskop) REFERENCES $TABLE_BIOSKOP(id_bioskop))")
 
         private const val CREATE_TABLE_BANGKU = ("CREATE TABLE $TABLE_BANGKU (" +
-                "id_bangku INTEGER PRIMARY KEY, " +
-                "id_bioskop INTEGER, " +
-                "nomor_bangku TEXT, " +
-                "FOREIGN KEY(id_bioskop) REFERENCES $TABLE_BIOSKOP(id_bioskop))")
+                "id_bangku INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "nomor_bangku TEXT)")
 
         private const val CREATE_TABLE_PENGGUNA = ("CREATE TABLE $TABLE_PENGGUNA (" +
                 "id_pengguna INTEGER PRIMARY KEY, " +

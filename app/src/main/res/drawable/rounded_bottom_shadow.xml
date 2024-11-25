@@ -1,11 +1,24 @@
 <!-- res/drawable/rounded_border.xml -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer -->
+    <item>
+        <shape>
+            <solid android:color="#B3B3B3" />
+
+            <corners
+                android:topLeftRadius="12dp"
+                android:topRightRadius="12dp"
+                android:bottomLeftRadius="12dp"
+                android:bottomRightRadius="12dp" />
+        </shape>
+    </item>
+    <!-- Border and background layer -->
     <item android:top="0dp" android:bottom="4dp" android:left="0dp" android:right="0dp">
         <shape>
             <solid android:color="@android:color/white" />
             <stroke
                 android:width="2dp"
-                android:color="#FFFFFF" />
+                android:color="#000000" />
             <corners
                 android:topLeftRadius="12dp"
                 android:topRightRadius="12dp"

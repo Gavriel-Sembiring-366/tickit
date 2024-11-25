@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.tickit.database.DBHelper
 import com.example.tickit.database.MediaStoreHelper
+import com.example.tickit.database.populatedata
 import com.example.tickit.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -27,6 +29,11 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
+
+        val dbHelper = DBHelper(this, null)
+        val db = dbHelper.writableDatabase
+        populatedata().populateMockData(db)
+        populatedata().populateImage(this)
 
         supportActionBar?.apply {
             // Enable custom view and disable default title

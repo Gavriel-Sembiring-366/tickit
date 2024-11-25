@@ -1,5 +1,6 @@
 package com.example.tickit.ui.carousels
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tickit.R
+import com.example.tickit.entities.film.Film
+import com.example.tickit.entities.film.GetImgMimeName
 
 class CarouselAdapter(
-    private val ListCarouselItem: List<ItemCarousel>,
+    private val context: Context,
+    private val ListCarouselItem: List<Film>,
     private val itemWidth: Int,
     private val itemHeight: Int,
     private val backgroundColor: Int?
@@ -22,8 +26,12 @@ class CarouselAdapter(
         private val Image: ImageView = itemView.findViewById(R.id.carousel_image)
         private val Background: TextView = itemView.findViewById(R.id.background)
 
-        fun bind(Item: ItemCarousel) {
-            Image.setImageResource(Item.imageResId)
+        fun bind(Item: Film) {
+
+            val imagePotraitBitmap = GetImgMimeName(context).getImgMimePotraitName(Item.judul?:"")
+            imagePotraitBitmap?.let {
+                Image.setImageBitmap(it)
+            }
             if (backgroundColor!=null){
                 Background.setBackgroundColor(backgroundColor)
             }

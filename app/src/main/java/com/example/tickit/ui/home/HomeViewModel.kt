@@ -3,28 +3,40 @@ package com.example.tickit.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.tickit.R
-import com.example.tickit.ui.carousels.ItemCarousel
+import androidx.lifecycle.viewModelScope
+import com.example.tickit.entities.film.Film
+import com.example.tickit.entities.film.FilmRepository
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val filmRepository: FilmRepository) : ViewModel() {
+    private val _dataList = MutableLiveData<List<Film>?>()
+    val dataList: LiveData<List<Film>?> get() = _dataList
 
-    private val _listHighlightMovies = MutableLiveData<MutableList<ItemCarousel>>(
-        mutableListOf(
-            ItemCarousel("Item 1", R.drawable.sf_coast),
-            ItemCarousel("Item 2", R.drawable.sf_coast),
-            ItemCarousel("Item 3", R.drawable.sf_coast),
-            ItemCarousel("Item 4", R.drawable.sf_coast)
-        )
-    )
-    val listHighlightMovies: LiveData<MutableList<ItemCarousel>> = _listHighlightMovies
+    fun getFilmsByIds(ids: List<Int>) {
+        viewModelScope.launch {
+            val films = filmRepository.getFilmsByIds(ids)
+            _dataList.value = films
+        }
+    }
 
-    private val _listOnGoingMovies = MutableLiveData<MutableList<ItemCarousel>>(
-        mutableListOf(
-            ItemCarousel("Item 1", R.drawable.titanic),
-            ItemCarousel("Item 2", R.drawable.titanic),
-            ItemCarousel("Item 3", R.drawable.titanic),
-            ItemCarousel("Item 4", R.drawable.titanic)
-        )
-    )
-    val listOnGoingMovies: LiveData<MutableList<ItemCarousel>> = _listOnGoingMovies
+    private val _highlightMovies = MutableLiveData<List<Film>?>()
+    val highlightMovies: LiveData<List<Film>?> get() = _highlightMovies
+
+    private val _onGoingMovies = MutableLiveData<List<Film>?>()
+    val onGoingMovies: LiveData<List<Film>?> get() = _onGoingMovies
+
+    fun getHighlightMovies(ids: List<Int>) {
+        viewModelScope.launch {
+            _highlightMovies.value = filmRepository.getFilmsByIds(ids)
+        }
+    }
+
+    fun getOnGoingMovies(ids: List<Int>) {
+        viewModelScope.launch {
+            _onGoingMovies.value = filmRepository.getFilmsByIds(ids)
+        }
+    }
+
+
+
 }

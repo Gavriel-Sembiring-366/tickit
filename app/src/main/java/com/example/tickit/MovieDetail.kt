@@ -16,6 +16,7 @@ import com.example.tickit.database.MediaStoreHelper
 import com.example.tickit.database.populatedata
 import com.example.tickit.databinding.ActivityMovieDetailBinding
 import com.example.tickit.entities.film.FilmRepository
+import com.example.tickit.entities.film.GetImgMimeName
 
 class MovieDetail : AppCompatActivity() {
 
@@ -33,9 +34,9 @@ class MovieDetail : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_movie_detail)
         navView.setupWithNavController(navController)
 
-//        val dbHelper = DBHelper(this, null)
-//        val db = dbHelper.writableDatabase
-//        populatedata().populateMockData(db)
+        val dbHelper = DBHelper(this, null)
+        val db = dbHelper.writableDatabase
+        populatedata().populateMockData(db)
         populatedata().populateImage(this)
         viewModel.getFilmById(1)
 
@@ -51,15 +52,13 @@ class MovieDetail : AppCompatActivity() {
                 binding.umurRatingFilm.text = film.umurRating ?: ""
 
 
-                val imageCarousel = (film.judul?.lowercase()?.replace(" ", "_") ?: "") + "_carousel.jpeg"
-                val imageCarouselBitmap = MediaStoreHelper(this).getImageFromMediaStore(imageCarousel)
-                imageCarouselBitmap?.let {
+                val imageLandscapeBitmap = GetImgMimeName(this).getImgMimeLandscapeName(film.judul?:"")
+                imageLandscapeBitmap?.let {
                     binding.moviePoster.setImageBitmap(it)
                 }
 
-                val imageCard = (film.judul?.lowercase()?.replace(" ", "_") ?: "") + "_card.jpeg"
-                val imageCardBitmap = MediaStoreHelper(this).getImageFromMediaStore(imageCard)
-                imageCardBitmap?.let {
+                val imagePotraitBitmap = GetImgMimeName(this).getImgMimePotraitName(film.judul?:"")
+                imagePotraitBitmap?.let {
                     binding.movieCardImage.setImageBitmap(it)
                 }
 
