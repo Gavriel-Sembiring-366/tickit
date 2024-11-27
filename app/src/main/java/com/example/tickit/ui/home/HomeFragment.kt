@@ -31,9 +31,8 @@ class HomeFragment : Fragment(), CarouselAdapter.OnCenteredItemChangedListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val highlightMovieId = listOf(1,2)
+        val highlightMovieId = listOf(1,2,3,4)
         homeViewModel.getHighlightMovies(highlightMovieId)
-
         var listHighlightMovies: List<Film> = emptyList()
         homeViewModel.highlightMovies.observe(viewLifecycleOwner) { filmList ->
             if (filmList != null) {

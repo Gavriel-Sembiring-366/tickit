@@ -1,25 +1,22 @@
 package com.example.tickit
 
 
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.tickit.database.DBHelper
-import com.example.tickit.database.MediaStoreHelper
-import com.example.tickit.database.populatedata
 import com.example.tickit.databinding.ActivityMovieDetailBinding
 import com.example.tickit.entities.film.FilmRepository
 import com.example.tickit.entities.film.GetImgMimeName
+import com.example.tickit.ui.sinopsis.SinopsisFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MovieDetail : AppCompatActivity() {
-
+    var idFilm: Int? = null
     private lateinit var binding: ActivityMovieDetailBinding
     private val repository by lazy { FilmRepository(applicationContext) }
     private val viewModel: MovieDetailViewModel by viewModels {MovieDetailViewModelFactory(repository)}
@@ -34,14 +31,26 @@ class MovieDetail : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_movie_detail)
         navView.setupWithNavController(navController)
 
-        val dbHelper = DBHelper(this, null)
-        val db = dbHelper.writableDatabase
-        populatedata().populateMockData(db)
-        populatedata().populateImage(this)
-        viewModel.getFilmById(1)
+//        val dbHelper = DBHelper(this, null)
+//        val db = dbHelper.writableDatabase
+//        populatedata().populateMockData(db)
+//        populatedata().populateImage(this)
+
+        val extras = intent.extras
+        if (extras != null) {
+            val idFilm = extras.getInt("idFilm")
+            viewModel.getFilmById(idFilm!!)
+            viewModel.setCurrentFilmId(idFilm)
+
+            viewModel.currentFilmId.observe(this) { filmId ->
+                Toast.makeText(this, "ID FILM SEKARANG $filmId", Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
         viewModel.data.observe(this) { film ->
             if (film != null) {
+                film.idFilm?.let { viewModel.setCurrentFilmId(it) }
                 binding.judulFilm.text = film.judul?.uppercase() ?: ""
                 binding.genreFilm.text = film.genre?: ""
                 binding.durasiFilm.text = buildString {

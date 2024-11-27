@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
-
-        val dbHelper = DBHelper(this, null)
-        val db = dbHelper.writableDatabase
-        populatedata().populateMockData(db)
-        populatedata().populateImage(this)
+//
+//        val dbHelper = DBHelper(this, null)
+//        val db = dbHelper.writableDatabase
+//        populatedata().populateMockData(db)
+//        populatedata().populateImage(this)
 
         supportActionBar?.apply {
             // Enable custom view and disable default title

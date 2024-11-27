@@ -19,4 +19,15 @@ class MovieDetailViewModel(private val repository: FilmRepository) : ViewModel()
             _data.value = film
         }
     }
+
+    val currentFilmId = MutableLiveData<Int>()
+
+    fun getCurrentFilmId(): LiveData<Int> {
+        return currentFilmId
+    }
+
+    fun setCurrentFilmId(data: Int) {
+        currentFilmId.value = data
+    }
+
 }

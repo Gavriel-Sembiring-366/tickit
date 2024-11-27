@@ -20,8 +20,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tickit.MovieDetail
+import com.example.tickit.MovieDetailViewModel
+import com.example.tickit.MovieDetailViewModelFactory
 import com.example.tickit.R
 import com.example.tickit.databinding.FragmentJadwalBinding
+import com.example.tickit.entities.film.FilmRepository
 import com.example.tickit.entities.jadwal.Jadwal
 import com.example.tickit.entities.jadwal.JadwalRepository
 import kotlinx.coroutines.launch
@@ -30,8 +34,9 @@ import java.time.format.DateTimeFormatter
 class JadwalFragment : Fragment() {
 
     private var _binding: FragmentJadwalBinding? = null
-    private val repository by lazy { JadwalRepository(requireContext()) }
-    private val viewModel: JadwalViewModel by viewModels { JadwalViewModelFactory(repository) }
+
+    private val Jadwalrepository by lazy { JadwalRepository(requireContext()) }
+    private val viewModel: JadwalViewModel by viewModels { JadwalViewModelFactory(Jadwalrepository) }
     private val binding get() = _binding!!
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -43,7 +48,24 @@ class JadwalFragment : Fragment() {
         _binding = FragmentJadwalBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        viewModel.getJadwalByFilm(1)
+
+
+        return root
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val filmRepository by lazy { FilmRepository(requireContext()) }
+        val movieDetailViewModel: MovieDetailViewModel by viewModels({ requireActivity() }) {
+            MovieDetailViewModelFactory(filmRepository)
+        }
+
+        movieDetailViewModel.currentFilmId.observe(viewLifecycleOwner) { filmId ->
+            Toast.makeText(requireContext(), "ID FILM SINOPSIS $filmId", Toast.LENGTH_SHORT).show()
+            viewModel.getJadwalByFilm(filmId)
+        }
 
         viewModel.data.observe(viewLifecycleOwner) { jadwal ->
             if (!jadwal.isNullOrEmpty()) {
@@ -53,9 +75,8 @@ class JadwalFragment : Fragment() {
             }
         }
 
-        return root
-    }
 
+    }
     private fun displayNoScheduleMessage() {
         val textView = TextView(requireContext()).apply {
             text = "No schedule available"
@@ -99,7 +120,7 @@ class JadwalFragment : Fragment() {
 
         lifecycleScope.launch {
             groupedByBioskop.forEach { (idBioskop, schedules) ->
-                val namaBioskop = repository.getBioskopById(idBioskop!!) ?: "Unknown Bioskop"
+                val namaBioskop = Jadwalrepository.getBioskopById(idBioskop!!) ?: "Unknown Bioskop"
 
                 // Create a ConstraintLayout
                 val constraintLayout = ConstraintLayout(requireContext()).apply {

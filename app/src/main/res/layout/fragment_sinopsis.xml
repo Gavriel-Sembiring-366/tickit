@@ -7,7 +7,6 @@
     android:padding="10dp"
     tools:context=".ui.sinopsis.SinopsisFragment"
     android:background="@color/white">
-
     <TextView
         android:id="@+id/sutradara_title"
 
@@ -68,5 +67,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sinopsis_title" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
