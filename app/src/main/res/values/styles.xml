@@ -3,7 +3,11 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">15dp</item>
     </style>
-
+    <style name="CustomButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/pink</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="cornerRadius">30dp</item>
+    </style>
     <style name="CustomActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="background">@color/white</item>
         <item name="android:layout_height">20dp</item>
@@ -38,6 +42,27 @@
         <item name="cornerRadius">8dp</item>
         <item name="android:textColor">@color/red</item>
     </style>
-
+    <style name="CustomButton1" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">30dp</item>
+    </style>
+    <style name="CustomButton2" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/pink</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+    <style name="CustomButton3" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/white</item>
+        <item name="strokeColor">@color/black</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="CustomButton4" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
 
 </resources>
