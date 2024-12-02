@@ -79,7 +79,7 @@ class Login : Fragment() {
         // Listener untuk tombol "Kembali"
         backButton.setOnClickListener {
             // Logika untuk kembali ke halaman sebelumnya
-            requireActivity().onBackPressed()
+            findNavController().navigate(R.id.action_loginFragment_to_tampilanAwalFragment)
         }
 
         return binding

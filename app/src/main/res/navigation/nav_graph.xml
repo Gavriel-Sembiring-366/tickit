@@ -40,7 +40,11 @@
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
-            app:destination="@id/resetPasswordFragment" />
+            app:destination="@id/konfirmasiPassword" />
+        <action
+            android:id="@+id/action_loginFragment_to_tampilanAwalFragment"
+            app:destination="@id/tampilanAwalFragment" />
+
     </fragment>
 
     <!-- Home Fragment -->
@@ -71,24 +75,31 @@
         android:label="Verifikasi Email"
         tools:layout="@layout/fragment_verifikasi_email">
         <action
-            android:id="@+id/action_verifikasiEmailFragment_to_passwordConfirmationFragment"
-            app:destination="@id/passwordConfirmationFragment" />
+            android:id="@+id/action_verifikasiEmailFragment_to_konfirmasiPasswordFragment"
+            app:destination="@id/konfirmasiPassword" />
         <action
             android:id="@+id/action_verifikasiEmailFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
     </fragment>
 
-    <!-- Password Confirmation Fragment -->
+    <!-- Konfirmasi Password Fragment -->
     <fragment
-        android:id="@+id/passwordConfirmationFragment"
+        android:id="@+id/konfirmasiPassword"
         android:name="com.example.tickit.ui.konfirmasiPassword.KonfirmasiPassword"
-        android:label="Password Confirmation"
-        tools:layout="@layout/fragment_konfirmasi_password" />
+        android:label="Konfirmasi Password"
+        tools:layout="@layout/fragment_konfirmasi_password">
+        <action
+            android:id="@+id/action_konfirmasiPassword_to_verifikasiEmailFragment"
+            app:destination="@id/verifikasiEmailFragment" />
+        <action
+            android:id="@+id/action_konfirmasiPassword_to_daftarSuksesFragment"
+            app:destination="@id/daftarSuksesFragment" />
+    </fragment>
 
-    <!-- Reset Password Fragment -->
+    <!-- Daftar Sukses Fragment -->
     <fragment
-        android:id="@+id/resetPasswordFragment"
-        android:name="com.example.tickit.ui.konfirmasiPassword.KonfirmasiPassword"
-        android:label="Reset Password"
-        tools:layout="@layout/fragment_konfirmasi_password" />
+        android:id="@+id/daftarSuksesFragment"
+        android:name="com.example.tickit.ui.daftarSukses.DaftarSukses"
+        android:label="Daftar Sukses"
+        tools:layout="@layout/fragment_daftar_sukses" />
 </navigation>

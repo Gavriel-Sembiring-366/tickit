@@ -122,7 +122,7 @@ class VerifikasiEmail : Fragment() {
         // Simulasi verifikasi kode
         if (code == "123456") { // Ganti dengan logika backend yang sesuai
             countdownTimer.cancel() // Hentikan timer jika verifikasi berhasil
-            findNavController().navigate(R.id.action_verifikasiEmailFragment_to_passwordConfirmationFragment)
+            findNavController().navigate(R.id.action_verifikasiEmailFragment_to_konfirmasiPasswordFragment)
         } else {
             Toast.makeText(requireContext(), "Kode salah", Toast.LENGTH_SHORT).show()
         }

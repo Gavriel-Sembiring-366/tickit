@@ -1,12 +1,16 @@
-package com.example.tickit
+package com.example.tickit.ui.konfirmasiPassword
 
 import android.os.Bundle
 import android.text.InputType
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.tickit.R
 import com.example.tickit.databinding.FragmentKonfirmasiPasswordBinding
 
 class KonfirmasiPassword : Fragment() {
@@ -17,61 +21,75 @@ class KonfirmasiPassword : Fragment() {
     private var isPasswordVisible = false
     private var isConfirmPasswordVisible = false
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentKonfirmasiPasswordBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentKonfirmasiPasswordBinding.bind(view)
 
         setupListeners()
     }
 
     private fun setupListeners() {
+        var isPasswordVisible = false
+        var isConfirmPasswordVisible = false
+
         // Back button action
         binding.backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_konfirmasiPassword_to_verifikasiEmail)
+            findNavController().navigate(R.id.action_konfirmasiPassword_to_verifikasiEmailFragment)
         }
 
         // Toggle password visibility for Buat Password
         binding.imageViewEye.setOnClickListener {
-            togglePasswordVisibility(binding.editTextBuatPassword, binding.imageViewEye, ::isPasswordVisible)
-            isPasswordVisible = !isPasswordVisible
+            isPasswordVisible = togglePasswordVisibility(binding.editTextBuatPassword, binding.imageViewEye, isPasswordVisible)
         }
 
         // Toggle password visibility for Konfirmasi Password
         binding.imageViewEye2.setOnClickListener {
-            togglePasswordVisibility(binding.editTextKonfirmasiPassword, binding.imageViewEye2, ::isConfirmPasswordVisible)
-            isConfirmPasswordVisible = !isConfirmPasswordVisible
+            isConfirmPasswordVisible = togglePasswordVisibility(binding.editTextKonfirmasiPassword, binding.imageViewEye2, isConfirmPasswordVisible)
         }
 
-        // Save password button
+        // Save Password button action
         binding.btnSave.setOnClickListener {
-            val password = binding.editTextBuatPassword.text.toString()
-            val confirmPassword = binding.editTextKonfirmasiPassword.text.toString()
+            val buatPassword = binding.editTextBuatPassword.text.toString()
+            val konfirmasiPassword = binding.editTextKonfirmasiPassword.text.toString()
 
-            if (password.isEmpty() || confirmPassword.isEmpty()) {
+            if (buatPassword.isEmpty() || konfirmasiPassword.isEmpty()) {
                 Toast.makeText(requireContext(), "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            } else if (password.length < 8 || password.any { !it.isLetterOrDigit() }) {
-                Toast.makeText(requireContext(), "Password harus minimal 8 karakter tanpa simbol", Toast.LENGTH_SHORT).show()
-            } else if (password != confirmPassword) {
-                Toast.makeText(requireContext(), "Password dan konfirmasi password tidak sama", Toast.LENGTH_SHORT).show()
-            } else {
-                findNavController().navigate(R.id.action_konfirmasiPassword_to_daftarSukses)
+                return@setOnClickListener
             }
+
+            if (buatPassword != konfirmasiPassword) {
+                Toast.makeText(requireContext(), "Password tidak cocok", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Navigate to Daftar Sukses Fragment
+            findNavController().navigate(R.id.action_konfirmasiPassword_to_daftarSuksesFragment)
         }
     }
 
-    private fun togglePasswordVisibility(editText: View, imageView: ImageView, isVisible: Boolean) {
-        if (editText is androidx.appcompat.widget.AppCompatEditText) {
-            if (isVisible) {
-                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                imageView.setImageResource(R.drawable.ic_eye)
-            } else {
-                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                imageView.setImageResource(R.drawable.ic_eye_open)
-            }
-            // Retain cursor position
-            editText.setSelection(editText.text.length)
+
+
+    private fun togglePasswordVisibility(editText: EditText, imageView: ImageView, isVisible: Boolean): Boolean {
+        if (isVisible) {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            imageView.setImageResource(R.drawable.ic_eye)
+        } else {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            imageView.setImageResource(R.drawable.ic_eye_open)
         }
+        // Retain cursor position
+        editText.setSelection(editText.text.length)
+        return !isVisible
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
