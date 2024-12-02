@@ -1,60 +1,87 @@
 package com.example.tickit.ui.login
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.navigation.fragment.findNavController
 import com.example.tickit.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Login.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Login : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // Deklarasi elemen UI
+    private lateinit var barLogin: View
+    private lateinit var masukText: TextView
+    private lateinit var backButton: AppCompatImageButton
+    private lateinit var emailLabel: TextView
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordLabel: TextView
+    private lateinit var passwordEditText: EditText
+    private lateinit var lupaPwText: TextView
+    private lateinit var resetPwText: TextView
+    private lateinit var loginButton: Button
+    private lateinit var belumDaftarText: TextView
+    private lateinit var daftarButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
-    }
+        // Menginflate layout fragment_login
+        val binding = inflater.inflate(R.layout.fragment_login, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Login.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Login().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        // Inisialisasi elemen UI
+        barLogin = binding.findViewById(R.id.bar_login)
+        masukText = binding.findViewById(R.id.masuk)
+        backButton = binding.findViewById(R.id.back_login)
+        emailLabel = binding.findViewById(R.id.email_masuk)
+        emailEditText = binding.findViewById(R.id.editEmail1)
+        passwordLabel = binding.findViewById(R.id.password)
+        passwordEditText = binding.findViewById(R.id.editpw1)
+        lupaPwText = binding.findViewById(R.id.lupa_pw)
+        resetPwText = binding.findViewById(R.id.reset_pw)
+        loginButton = binding.findViewById(R.id.button_masuk)
+        belumDaftarText = binding.findViewById(R.id.belum_daftar)
+        daftarButton = binding.findViewById(R.id.button_daftar)
+
+        // Listener untuk tombol "Masuk"
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+            // Tambahkan logika untuk login di sini
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                // Navigasi ke halaman beranda setelah login berhasil
+                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            } else {
+                // Beri feedback kepada pengguna jika input kosong
+                emailEditText.error = "Email tidak boleh kosong"
+                passwordEditText.error = "Password tidak boleh kosong"
             }
+        }
+
+        // Listener untuk tombol "Daftar Sekarang"
+        daftarButton.setOnClickListener {
+            // Navigasi ke halaman pendaftaran
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+        // Listener untuk tombol "Reset Password"
+        resetPwText.setOnClickListener {
+            // Navigasi ke halaman reset password
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
+        }
+
+        // Listener untuk tombol "Kembali"
+        backButton.setOnClickListener {
+            // Logika untuk kembali ke halaman sebelumnya
+            requireActivity().onBackPressed()
+        }
+
+        return binding
     }
 }

@@ -1,60 +1,135 @@
 package com.example.tickit.ui.verifikasiEmail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.tickit.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [VerifikasiEmail.newInstance] factory method to
- * create an instance of this fragment.
- */
 class VerifikasiEmail : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var backButton: ImageButton
+    private lateinit var editTexts: List<EditText>
+    private lateinit var keypadButtons: List<Button>
+    private lateinit var deleteButton: Button
+    private lateinit var nextButton: Button
+    private lateinit var timerTextView: TextView
+    private var currentIndex = 0
+
+    private lateinit var countdownTimer: CountDownTimer
+    private var isTimerRunning = false
+    private val timerDuration = 300000L // 5 menit dalam milidetik
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_verifikasi_email, container, false)
+        val view = inflater.inflate(R.layout.fragment_verifikasi_email, container, false)
+
+        // Inisialisasi view
+        backButton = view.findViewById(R.id.backButton)
+        editTexts = listOf(
+            view.findViewById(R.id.editText1),
+            view.findViewById(R.id.editText2),
+            view.findViewById(R.id.editText3),
+            view.findViewById(R.id.editText4),
+            view.findViewById(R.id.editText5),
+            view.findViewById(R.id.editText6)
+        )
+        keypadButtons = listOf(
+            view.findViewById(R.id.button0),
+            view.findViewById(R.id.button1),
+            view.findViewById(R.id.button2),
+            view.findViewById(R.id.button3),
+            view.findViewById(R.id.button4),
+            view.findViewById(R.id.button5),
+            view.findViewById(R.id.button6),
+            view.findViewById(R.id.button7),
+            view.findViewById(R.id.button8),
+            view.findViewById(R.id.button9)
+        )
+        deleteButton = view.findViewById(R.id.buttonD)
+        nextButton = view.findViewById(R.id.nextButton)
+        timerTextView = view.findViewById(R.id.resendCodeText)
+
+        setupListeners()
+        startCountdownTimer()
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment VerifikasiEmail.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            VerifikasiEmail().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun setupListeners() {
+        // Tombol kembali
+        backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_verifikasiEmailFragment_to_registerFragment)
+        }
+
+        // Input keypad
+        keypadButtons.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                if (currentIndex < editTexts.size) {
+                    editTexts[currentIndex].setText(index.toString())
+                    currentIndex++
                 }
             }
+        }
+
+        // Tombol hapus
+        deleteButton.setOnClickListener {
+            if (currentIndex > 0) {
+                currentIndex--
+                editTexts[currentIndex].setText("")
+            }
+        }
+
+        // Tombol selanjutnya
+        nextButton.setOnClickListener {
+            val code = editTexts.joinToString("") { it.text.toString() }
+            if (code.length == 6) {
+                verifyCode(code)
+            } else {
+                Toast.makeText(requireContext(), "Kode belum lengkap", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun startCountdownTimer() {
+        countdownTimer = object : CountDownTimer(timerDuration, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = (millisUntilFinished / 1000) / 60
+                val seconds = (millisUntilFinished / 1000) % 60
+                timerTextView.text = String.format("Kirim ulang dalam %02d:%02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                isTimerRunning = false
+                sendCodeAgain()
+            }
+        }.start()
+        isTimerRunning = true
+    }
+
+    private fun sendCodeAgain() {
+        Toast.makeText(requireContext(), "Kode baru telah dikirim ke email Anda", Toast.LENGTH_SHORT).show()
+        // Panggil API atau logika backend untuk mengirim ulang kode verifikasi
+        startCountdownTimer() // Restart timer setelah mengirim ulang kode
+    }
+
+    private fun verifyCode(code: String) {
+        // Simulasi verifikasi kode
+        if (code == "123456") { // Ganti dengan logika backend yang sesuai
+            countdownTimer.cancel() // Hentikan timer jika verifikasi berhasil
+            findNavController().navigate(R.id.action_verifikasiEmailFragment_to_passwordConfirmationFragment)
+        } else {
+            Toast.makeText(requireContext(), "Kode salah", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (isTimerRunning) countdownTimer.cancel() // Pastikan timer dihentikan saat fragment dihancurkan
     }
 }

@@ -1,60 +1,80 @@
-package com.example.tickit.ui.konfirmasiPassword
+package com.example.tickit
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.text.InputType
 import android.view.View
-import android.view.ViewGroup
-import com.example.tickit.R
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.tickit.databinding.FragmentKonfirmasiPasswordBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [KonfirmasiPassword.newInstance] factory method to
- * create an instance of this fragment.
- */
 class KonfirmasiPassword : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentKonfirmasiPasswordBinding? = null
+    private val binding get() = _binding!!
+
+    private var isPasswordVisible = false
+    private var isConfirmPasswordVisible = false
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentKonfirmasiPasswordBinding.bind(view)
+
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        // Back button action
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_konfirmasiPassword_to_verifikasiEmail)
+        }
+
+        // Toggle password visibility for Buat Password
+        binding.imageViewEye.setOnClickListener {
+            togglePasswordVisibility(binding.editTextBuatPassword, binding.imageViewEye, ::isPasswordVisible)
+            isPasswordVisible = !isPasswordVisible
+        }
+
+        // Toggle password visibility for Konfirmasi Password
+        binding.imageViewEye2.setOnClickListener {
+            togglePasswordVisibility(binding.editTextKonfirmasiPassword, binding.imageViewEye2, ::isConfirmPasswordVisible)
+            isConfirmPasswordVisible = !isConfirmPasswordVisible
+        }
+
+        // Save password button
+        binding.btnSave.setOnClickListener {
+            val password = binding.editTextBuatPassword.text.toString()
+            val confirmPassword = binding.editTextKonfirmasiPassword.text.toString()
+
+            if (password.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(requireContext(), "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            } else if (password.length < 8 || password.any { !it.isLetterOrDigit() }) {
+                Toast.makeText(requireContext(), "Password harus minimal 8 karakter tanpa simbol", Toast.LENGTH_SHORT).show()
+            } else if (password != confirmPassword) {
+                Toast.makeText(requireContext(), "Password dan konfirmasi password tidak sama", Toast.LENGTH_SHORT).show()
+            } else {
+                findNavController().navigate(R.id.action_konfirmasiPassword_to_daftarSukses)
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_konfirmasi_password, container, false)
+    private fun togglePasswordVisibility(editText: View, imageView: ImageView, isVisible: Boolean) {
+        if (editText is androidx.appcompat.widget.AppCompatEditText) {
+            if (isVisible) {
+                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                imageView.setImageResource(R.drawable.ic_eye)
+            } else {
+                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                imageView.setImageResource(R.drawable.ic_eye_open)
+            }
+            // Retain cursor position
+            editText.setSelection(editText.text.length)
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment KonfirmasiPassword.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            KonfirmasiPassword().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

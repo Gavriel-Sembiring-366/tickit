@@ -1,34 +1,19 @@
 package com.example.tickit.ui.daftar
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.tickit.R
+import com.example.tickit.databinding.FragmentDaftarBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [daftar.newInstance] factory method to
- * create an instance of this fragment.
- */
-class daftar : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class Daftar : Fragment(R.layout.fragment_daftar) {
+    // Deklarasikan ViewBinding
+    private var _binding: FragmentDaftarBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +23,47 @@ class daftar : Fragment() {
         return inflater.inflate(R.layout.fragment_daftar, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment daftar.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            daftar().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Inisialisasi binding
+        _binding = FragmentDaftarBinding.bind(view)
+
+        // Setup click listener for the "Back" button to navigate to the login page
+        binding.backDaftar.setOnClickListener {
+            // Navigate to the login fragment
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+        }
+
+        // Setup click listener for the "Daftar TICK IT" button
+        binding.buttonDaftar.setOnClickListener {
+            val nama = binding.editTextNama.text.toString()
+            val email = binding.editEmail2.text.toString()
+
+            if (nama.isNotEmpty() && email.isNotEmpty()) {
+                // Navigate to the email verification fragment if input is valid
+                findNavController().navigate(R.id.action_registerFragment_to_verifikasiEmailFragment)
+            } else {
+                // Show error messages if any input is empty
+                if (nama.isEmpty()) {
+                    binding.editTextNama.error = "Nama wajib diisi"
+                }
+                if (email.isEmpty()) {
+                    binding.editEmail2.error = "Email wajib diisi"
                 }
             }
+        }
+    }
+
+    private fun validateInputs() {
+        val nama = binding.editTextNama.text.toString()
+        val email = binding.editEmail2.text.toString()
+
+        // Enable/disable button based on validation
+        binding.buttonDaftar.isEnabled = nama.isNotEmpty() && email.isNotEmpty()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
