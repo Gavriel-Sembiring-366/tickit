@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.tickit.MovieDetailViewModel
 import com.example.tickit.R
 import com.example.tickit.databinding.FragmentHomeBinding
 import com.example.tickit.entities.film.Film
 import com.example.tickit.entities.film.FilmRepository
 import com.example.tickit.ui.carousels.CarouselAdapter
 import com.example.tickit.ui.carousels.CarouselLayoutManager
+import com.example.tickit.viewmodel.LoginViewModel
 
 class HomeFragment : Fragment(), CarouselAdapter.OnCenteredItemChangedListener {
 
@@ -21,7 +25,8 @@ class HomeFragment : Fragment(), CarouselAdapter.OnCenteredItemChangedListener {
     private val binding get() = _binding!!
     private val repository by lazy { FilmRepository(requireContext()) }
     private val homeViewModel: HomeViewModel by viewModels { HomeViewModelFactory(repository) }
-
+//    private val loginViewModel: LoginViewModel by viewModels()
+    private var hasNavigatedToLogin = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,6 +35,23 @@ class HomeFragment : Fragment(), CarouselAdapter.OnCenteredItemChangedListener {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        loginViewModel.loginState.observe(viewLifecycleOwner) { state ->
+            val token = state.data?.token
+            Toast.makeText(requireContext(), "TOKEN LOGIN " + token, Toast.LENGTH_LONG).show()
+                loadUI()
+        }
+
+
+    }
+
+    private fun loadUI(){
 
         val highlightMovieId = listOf(1,2,3,4)
         homeViewModel.getHighlightMovies(highlightMovieId)
@@ -88,15 +110,15 @@ class HomeFragment : Fragment(), CarouselAdapter.OnCenteredItemChangedListener {
         }
 
 
-        return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 
     override fun onCenteredItemChanged(title: String) {
 //        binding.titleTextView.text = title
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

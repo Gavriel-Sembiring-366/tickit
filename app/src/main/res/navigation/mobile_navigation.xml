@@ -11,7 +11,10 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-
-
+    <fragment
+        android:id="@+id/navigation_login"
+        android:name="com.example.tickit.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
 
 </navigation>

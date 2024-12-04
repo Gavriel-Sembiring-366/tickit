@@ -40,9 +40,27 @@ android {
 }
 
 dependencies {
+    implementation(libs.jwtdecode)
+    implementation(libs.androidx.datastore.preferences)
+    implementation (libs.androidx.navigation.compose)
+
+//    compose view model
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+//    Network calls
+    implementation(libs.retrofit)
+
+//    Json to Kotlin object Mapping
+    implementation(libs.converter.gson)
+
+//    image loading
+    implementation(libs.coil.compose)
+
     implementation (libs.androidx.room.runtime)
-    implementation(libs.androidx.ui.desktop)
     implementation(libs.places)
+    implementation(libs.androidx.datastore.core.android)
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.datastore.preferences.core.jvm)
     kapt (libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
