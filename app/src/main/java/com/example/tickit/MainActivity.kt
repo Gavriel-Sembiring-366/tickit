@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         lifecycleScope.launch {
-            // Use the applicationContext for DataStoreManager
             val dataStoreManager = DataStoreManager(applicationContext)
 
             dataStoreManager.getFromDataStore().collect { auth ->
