@@ -1,12 +1,10 @@
 package com.example.tickit
 
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -30,10 +28,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
-
-        val loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-        var hasNavigatedToLogin = false
-
 
         lifecycleScope.launch {
             // Use the applicationContext for DataStoreManager
