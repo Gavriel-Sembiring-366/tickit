@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
                     // Show the token in a Toast or handle the token
                     Toast.makeText(this@MainActivity, "Login TOKEN: $token", Toast.LENGTH_LONG).show()
                 } else {
-                    // Handle case where no token is available (e.g., user needs to log in)
                     Toast.makeText(this@MainActivity, "No token found. Please log in.", Toast.LENGTH_LONG).show()
                 }
             }
