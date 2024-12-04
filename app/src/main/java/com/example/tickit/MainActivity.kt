@@ -8,10 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-
 import com.example.tickit.databinding.ActivityMainBinding
 import com.example.tickit.utils.DataStoreManager
-import com.example.tickit.viewmodel.LoginViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
