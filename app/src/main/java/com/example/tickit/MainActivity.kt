@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
             dataStoreManager.getFromDataStore().collect { auth ->
                 val token = auth.authToken
                 if (token.isNotEmpty()) {
-                    // Show the token in a Toast or handle the token
                     Toast.makeText(this@MainActivity, "Login TOKEN: $token", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this@MainActivity, "No token found. Please log in.", Toast.LENGTH_LONG).show()
