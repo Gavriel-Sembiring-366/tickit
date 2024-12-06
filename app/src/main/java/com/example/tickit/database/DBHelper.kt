@@ -72,7 +72,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "id_jadwal INTEGER," +
                 "id_bangku INTEGER, " +
                 "FOREIGN KEY(id_jadwal) REFERENCES $TABLE_JADWAL(id_jadwal)," +
-                "FOREIGN KEY(id_bangku) REFERENCES $TABLE_JADWAL(id_bangku))")
+                "FOREIGN KEY(id_bangku) REFERENCES $TABLE_BANGKU(id_bangku))")
 
         private const val CREATE_TABLE_BIOSKOP = ("CREATE TABLE $TABLE_BIOSKOP (" +
                 "id_bioskop INTEGER PRIMARY KEY, " +

@@ -1,6 +1,5 @@
 package com.example.tickit.viewmodel
 
-
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.dataStore
@@ -14,7 +13,6 @@ import com.example.tickit.model.apiService
 import com.example.tickit.utils.DataStoreManager
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-
 
 class LoginViewModel: ViewModel(){
 

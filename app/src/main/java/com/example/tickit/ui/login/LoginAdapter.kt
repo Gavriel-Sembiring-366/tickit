@@ -68,6 +68,13 @@ class LoginAdapter(
         }
     }
 
+    fun goToRegister(
+        registerButton :Button
+    ){
+        registerButton.setOnClickListener {
+            fragment.findNavController().navigate(R.id.navigation_register)
+        }
+    }
     private fun isEmailValid(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }

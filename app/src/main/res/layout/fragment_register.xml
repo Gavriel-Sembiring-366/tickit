@@ -89,7 +89,7 @@
         app:layout_constraintVertical_bias="0.041" />
 
     <ImageButton
-        android:id="@+id/back_daftar"
+        android:id="@+id/goToLogin"
         android:layout_width="79dp"
         android:layout_height="51dp"
         android:background="@null"
@@ -132,21 +132,20 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextNamaLengkap" />
 
     <Button
-        android:id="@+id/button_daftar"
+        android:id="@+id/registerButton"
         style="@style/CustomButtonMasuk"
         android:layout_width="380dp"
         android:layout_height="55dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/poppins_semibold"
         android:text="Daftar TICK IT"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.387"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.607" />
+        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
 
     <EditText
         android:id="@+id/editTextNamaLengkap"
@@ -176,5 +175,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_username" />
 
+
+    <ProgressBar
+        android:id="@+id/registerProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/registerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

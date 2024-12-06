@@ -7,7 +7,11 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.tickit.database.DBHelper
+import com.example.tickit.database.populatedata
 import com.example.tickit.databinding.ActivityMainBinding
 import com.example.tickit.utils.DataStoreManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,6 +27,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        val dbHelper = DBHelper(this, null)
+//        val db = dbHelper.writableDatabase
+//        populatedata().populateMockData(db)
+//        populatedata().populateImage(this)
+
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
@@ -33,9 +42,9 @@ class MainActivity : AppCompatActivity() {
             dataStoreManager.getFromDataStore().collect { auth ->
                 val token = auth.authToken
                 if (token.isNotEmpty()) {
-                    Toast.makeText(this@MainActivity, "Login TOKEN: $token", Toast.LENGTH_LONG).show()
+                    navController.navigate(R.id.navigation_home)
                 } else {
-                    Toast.makeText(this@MainActivity, "No token found. Please log in.", Toast.LENGTH_LONG).show()
+                    navController.navigate(R.id.navigation_login)
                 }
             }
         }
