@@ -14,14 +14,14 @@ import com.example.tickit.MovieDetail
 import com.example.tickit.R
 import com.example.tickit.entities.film.Film
 import com.example.tickit.entities.film.GetImgMimeName
+import com.example.tickit.model.FilmData
 
 class CarouselAdapter(
     private val context: Context,
-    private val ListCarouselItem: List<Film>,
+    private val ListCarouselItem: List<FilmData>,
     private val itemWidth: Int,
     private val itemHeight: Int,
     private val backgroundColor: Int?,
-
 
 ) : RecyclerView.Adapter<CarouselAdapter.CarouselViewHolder>() {
 
@@ -31,7 +31,7 @@ class CarouselAdapter(
         private val Image: ImageView = itemView.findViewById(R.id.carousel_image)
         private val Background: TextView = itemView.findViewById(R.id.background)
 
-        fun bind(Item: Film) {
+        fun bind(Item: FilmData) {
 
             val imagePotraitBitmap = GetImgMimeName(context).getImgMimePotraitName(Item.judul?:"")
             imagePotraitBitmap?.let {
@@ -47,9 +47,9 @@ class CarouselAdapter(
             itemView.layoutParams = layoutParams
 
             Image.setOnClickListener {
-                Toast.makeText(context, "id film: ${Item.idFilm}", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "id film: ${Item.film_id}", Toast.LENGTH_SHORT).show()
                 val intent = Intent(context, MovieDetail::class.java).apply {
-                    putExtra("idFilm", Item.idFilm)
+                    putExtra("idFilm", Item.film_id)
                 }
                 context.startActivity(intent)
             }
@@ -71,11 +71,6 @@ class CarouselAdapter(
     }
 
 
-    // ----- // Warning (Use this to control a textview text when an item is on the center) // ----- //
-    interface OnCenteredItemChangedListener {
-        fun onCenteredItemChanged(title: String) //Currently Not in use
-    }
-    // ----- // Warning (Use this to control a textview text when an item is on the center) // ----- //
 
 
     fun attachSnapHelperWithListener(recyclerView: RecyclerView) {

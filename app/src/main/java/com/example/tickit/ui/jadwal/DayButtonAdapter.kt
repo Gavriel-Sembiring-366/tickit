@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tickit.R
 import java.time.LocalDate
@@ -13,7 +15,10 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-class DayButtonAdapter(private val days: List<LocalDate>, private val onDayClick: (LocalDate) -> Unit) : RecyclerView.Adapter<DayButtonAdapter.DayButtonViewHolder>() {
+class DayButtonAdapter(
+    private val days: List<LocalDate>,
+    private val fragment: Fragment,
+    private val onDayClick: (LocalDate) -> Unit) : RecyclerView.Adapter<DayButtonAdapter.DayButtonViewHolder>(){
     private var currentlyActiveButton: Button? = null
     inner class DayButtonViewHolder(val button: Button) : RecyclerView.ViewHolder(button)
 
@@ -48,6 +53,7 @@ class DayButtonAdapter(private val days: List<LocalDate>, private val onDayClick
             }
             holder.button.background = ColorDrawable(ContextCompat.getColor(it.context, R.color.blue))
             currentlyActiveButton = holder.button
+
         }
     }
 

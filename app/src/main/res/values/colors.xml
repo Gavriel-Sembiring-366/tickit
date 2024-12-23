@@ -14,4 +14,9 @@
     <color name="grey">#828282</color>
     <color name="pink">#F7B4A7</color>
     <color name="carousel_background_color">#50FFFFFF</color>
+    <color name="available_button_color">#2B4B82</color>
+    <color name="selected_button_color">#F7B4A7</color>
+    <color name="unavailable_button_color">#D9D9D9</color>
+
+
 </resources>

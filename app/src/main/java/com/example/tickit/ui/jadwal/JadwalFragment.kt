@@ -1,5 +1,6 @@
 package com.example.tickit.ui.jadwal
 
+import FilmViewModel
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -17,26 +18,35 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.tickit.MovieDetail
 import com.example.tickit.MovieDetailViewModel
-import com.example.tickit.MovieDetailViewModelFactory
 import com.example.tickit.R
 import com.example.tickit.databinding.FragmentJadwalBinding
 import com.example.tickit.entities.film.FilmRepository
-import com.example.tickit.entities.jadwal.Jadwal
-import com.example.tickit.entities.jadwal.JadwalRepository
+import com.example.tickit.model.BioskopData
+import com.example.tickit.model.JadwalData
+import com.example.tickit.viewmodel.BioskopViewModel
+import com.example.tickit.viewmodel.JadwalViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
 class JadwalFragment : Fragment() {
 
     private var _binding: FragmentJadwalBinding? = null
+    private val bioskopViewModel: BioskopViewModel by viewModels()
+    private val jadwalViewModel: JadwalViewModel by viewModels()
 
-    private val Jadwalrepository by lazy { JadwalRepository(requireContext()) }
-    private val viewModel: JadwalViewModel by viewModels { JadwalViewModelFactory(Jadwalrepository) }
     private val binding get() = _binding!!
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,9 +57,6 @@ class JadwalFragment : Fragment() {
     ): View {
         _binding = FragmentJadwalBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
-
         return root
     }
 
@@ -57,19 +64,21 @@ class JadwalFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val filmRepository by lazy { FilmRepository(requireContext()) }
-        val movieDetailViewModel: MovieDetailViewModel by viewModels({ requireActivity() }) {
-            MovieDetailViewModelFactory(filmRepository)
-        }
+        val movieDetailViewModel: MovieDetailViewModel by activityViewModels()
+
 
         movieDetailViewModel.currentFilmId.observe(viewLifecycleOwner) { filmId ->
-            Toast.makeText(requireContext(), "ID FILM SINOPSIS $filmId", Toast.LENGTH_SHORT).show()
-            viewModel.getJadwalByFilm(filmId)
+
+            jadwalViewModel.getJadwalByFilmId(filmId)
         }
 
-        viewModel.data.observe(viewLifecycleOwner) { jadwal ->
-            if (!jadwal.isNullOrEmpty()) {
-                setupScheduleView(jadwal)
+        jadwalViewModel.jadwalDataByFilmId.observe(viewLifecycleOwner) { jadwalData ->
+//            Toast.makeText(requireContext(), "ID FILM JADWAL SUKSES", Toast.LENGTH_SHORT).show()
+            if (!jadwalData.isNullOrEmpty()) {
+                setupScheduleView(jadwalData)
+//                Toast.makeText(requireContext(), "ID FILM JADWAL SUKSES", Toast.LENGTH_SHORT).show()
             } else {
                 displayNoScheduleMessage()
             }
@@ -77,6 +86,7 @@ class JadwalFragment : Fragment() {
 
 
     }
+
     private fun displayNoScheduleMessage() {
         val textView = TextView(requireContext()).apply {
             text = "No schedule available"
@@ -87,12 +97,13 @@ class JadwalFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setupScheduleView(jadwal: List<Jadwal>) {
+    private fun setupScheduleView(jadwal: List<JadwalData>) {
         val groupedByDate = jadwal.groupBy {
-            LocalDateTime.parse(it.waktuTayang, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toLocalDate()
+            ZonedDateTime.parse(it.waktu_tayang.toString())
+                .toLocalDate()
         }
 
-        val dayButtonsAdapter = DayButtonAdapter(groupedByDate.keys.toList()) { selectedDate ->
+        val dayButtonsAdapter = DayButtonAdapter(groupedByDate.keys.toList(), this) { selectedDate ->
             binding.bioskopContainer.removeAllViews()
             val schedulesForDay = groupedByDate[selectedDate] ?: emptyList()
             displaySchedulesForDay(schedulesForDay)
@@ -104,48 +115,36 @@ class JadwalFragment : Fragment() {
         }
     }
 
-    private fun addBioskopHeader(namaBioskop: String) {
-        val bioskopNameTextView = TextView(requireContext()).apply {
-            text = namaBioskop
-            textSize = 18f
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-            setPadding(8, 8, 8, 8)
-        }
-        binding.bioskopContainer.addView(bioskopNameTextView)
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun displaySchedulesForDay(schedulesForDay: List<Jadwal>) {
-        val groupedByBioskop = schedulesForDay.groupBy { it.idBioskop }
-
+    private fun displaySchedulesForDay(schedulesForDay: List<JadwalData>) {
+        val groupedByBioskop = schedulesForDay.groupBy { it.bioskop_id }
         lifecycleScope.launch {
-            groupedByBioskop.forEach { (idBioskop, schedules) ->
-                val namaBioskop = Jadwalrepository.getBioskopById(idBioskop!!) ?: "Unknown Bioskop"
+            groupedByBioskop.forEach { (bioskopId, schedules) ->
+                // Use a suspend function to fetch bioskop data
+                val bioskopData = bioskopViewModel.getBioskopById(bioskopId) // Replace with suspend version
+                val namaBioskop = bioskopData.nama_bioskop
 
-                // Create a ConstraintLayout
                 val constraintLayout = ConstraintLayout(requireContext()).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
-                        setPadding(10,5,10,25)
-                        setMargins(0,0,0,50)
-                        setBackgroundResource(R.drawable.rounded_bottom_shadow)
+                        setMargins(0, 0, 0, 50)
                     }
+                    setPadding(10, 5, 10, 25)
+                    setBackgroundResource(R.drawable.rounded_bottom_shadow)
                 }
 
-                // Add TextView for bioskop name
                 val bioskopNameTextView = TextView(requireContext()).apply {
                     id = View.generateViewId()
                     text = namaBioskop
                     textSize = 18f
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
                     setPadding(20, 8, 8, 8)
-
                 }
                 constraintLayout.addView(bioskopNameTextView)
 
-                // Create a GridLayout with 5 columns
                 val gridLayout = GridLayout(requireContext()).apply {
                     id = View.generateViewId()
                     layoutParams = ConstraintLayout.LayoutParams(
@@ -153,56 +152,35 @@ class JadwalFragment : Fragment() {
                         ConstraintLayout.LayoutParams.WRAP_CONTENT
                     )
                     columnCount = 5
-
                 }
 
-                // Add buttons to the GridLayout
                 schedules.forEach { schedule ->
                     gridLayout.addView(createScheduleButtons(schedule, namaBioskop))
                 }
                 constraintLayout.addView(gridLayout)
 
-                // Set constraints for the TextView and GridLayout
                 ConstraintSet().apply {
                     clone(constraintLayout)
+                    connect(bioskopNameTextView.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                    connect(bioskopNameTextView.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
 
-                    // Constraints for TextView
-                    connect(
-                        bioskopNameTextView.id, ConstraintSet.TOP,
-                        ConstraintSet.PARENT_ID, ConstraintSet.TOP
-                    )
-                    connect(
-                        bioskopNameTextView.id, ConstraintSet.START,
-                        ConstraintSet.PARENT_ID, ConstraintSet.START
-                    )
-
-                    // Constraints for GridLayout
-                    connect(
-                        gridLayout.id, ConstraintSet.TOP,
-                        bioskopNameTextView.id, ConstraintSet.BOTTOM
-                    )
-                    connect(
-                        gridLayout.id, ConstraintSet.START,
-                        ConstraintSet.PARENT_ID, ConstraintSet.START
-                    )
-                    connect(
-                        gridLayout.id, ConstraintSet.END,
-                        ConstraintSet.PARENT_ID, ConstraintSet.END
-                    )
+                    connect(gridLayout.id, ConstraintSet.TOP, bioskopNameTextView.id, ConstraintSet.BOTTOM)
+                    connect(gridLayout.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                    connect(gridLayout.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
 
                     applyTo(constraintLayout)
                 }
 
-                // Add the ConstraintLayout to the parent container
                 binding.bioskopContainer.addView(constraintLayout)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createScheduleButtons(schedule: Jadwal, namaBioskop: String): Button {
-        val time = LocalDateTime.parse(schedule.waktuTayang, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toLocalTime()
-
+    private fun createScheduleButtons(schedule: JadwalData, namaBioskop: String): Button {
+        val time = ZonedDateTime.parse(schedule.waktu_tayang.toString())
+            .toLocalDate()
+        val movieDetailViewModel: MovieDetailViewModel by activityViewModels()
         return Button(requireContext()).apply {
             text = time.toString()
             textSize = 14f
@@ -222,8 +200,21 @@ class JadwalFragment : Fragment() {
             }
 
             setOnClickListener {
-                val toastMessage = "You clicked $namaBioskop at $text id: ${schedule.idJadwal}"
+                movieDetailViewModel.setJadwalId(schedule.jadwal_id)
+                val toastMessage = "You clicked $namaBioskop at $text ${schedule.waktu_tayang}"
+
+                val zonedDateTime = ZonedDateTime.parse(schedule.waktu_tayang)
+                val day = zonedDateTime.dayOfMonth
+                val dayOfWeek = zonedDateTime.dayOfWeek
+                val time = zonedDateTime.toLocalTime().withSecond(0).withNano(0)
+
+
+                movieDetailViewModel.setCurrentBioskopName(namaBioskop)
+                movieDetailViewModel.setCurrentTanggalHari("${day} ${dayOfWeek.name}  |  ")
+                movieDetailViewModel.setCurrentJamJadwal(time.toString())
+                movieDetailViewModel.setCurrentJadwalTanggalJam("${day} ${dayOfWeek.name}  | ${time.toString()} ")
                 Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.navigation_kursi)
             }
         }
     }

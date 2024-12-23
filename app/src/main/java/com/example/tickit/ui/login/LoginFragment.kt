@@ -47,9 +47,9 @@ class LoginFragment : Fragment() {
             DataStoreManager(requireContext()).getFromDataStore().collect { auth ->
                 val token = auth.authToken
                 if (token.isNotEmpty()) {
-                    Toast.makeText(requireContext(), "Login TOKEN: $token", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(requireContext(), "Login TOKEN: $token", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(requireContext(), "No token found. Please log in.", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(requireContext(), "No token found. Please log in.", Toast.LENGTH_LONG).show()
                 }
             }
         }

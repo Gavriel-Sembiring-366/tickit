@@ -35,7 +35,7 @@ class RegisterViewModel: ViewModel() {
                     val errorBody : APIError = Gson().fromJson(
                         response.errorBody()!!.charStream(),
                         APIError::class.java
-                    );
+                    )
                     throw Exception(errorBody.message)
                 }
 

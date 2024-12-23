@@ -1,18 +1,15 @@
 package com.example.tickit.ui.login
 
-import android.content.Context
 import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tickit.R
 import com.example.tickit.model.Account
 import com.example.tickit.utils.DataStoreManager
 import com.example.tickit.viewmodel.LoginViewModel
-import kotlinx.coroutines.launch
 
 class LoginAdapter(
     private val fragment: Fragment,
@@ -58,7 +55,7 @@ class LoginAdapter(
                     loginButton.isEnabled = true
 
                     if (state.isLogin) {
-                        Toast.makeText(fragment.requireContext(), "Login successful!", Toast.LENGTH_LONG).show()
+//                        Toast.makeText(fragment.requireContext(), "Login successful!", Toast.LENGTH_LONG).show()
                         fragment.findNavController().navigate(R.id.navigation_home)
                     } else if (state.error != null) {
                         Toast.makeText(fragment.requireContext(), state.error, Toast.LENGTH_LONG).show()

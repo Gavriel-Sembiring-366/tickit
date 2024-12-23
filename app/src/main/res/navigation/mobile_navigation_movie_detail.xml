@@ -15,5 +15,23 @@
         android:id="@+id/navigation_jadwal"
         android:name="com.example.tickit.ui.jadwal.JadwalFragment"
         android:label="@string/title_jadwal"
-        tools:layout="@layout/fragment_jadwal" />
+        tools:layout="@layout/fragment_jadwal">
+        <argument
+            android:name="jadwalId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_kursi"
+        android:name="com.example.tickit.ui.kursi.KursiFragment"
+        android:label="Kursi"
+        tools:layout="@layout/fragment_kursi" />
+
+    <fragment
+        android:id="@+id/navigation_pembayaran"
+        android:name="com.example.tickit.ui.pembayaran.PembayaranFragment"
+        android:label="Kursi"
+        tools:layout="@layout/fragment_kursi" />
+
 </navigation>

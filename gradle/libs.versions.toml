@@ -8,6 +8,8 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+lifecycleLivedataKtxVersion = "2.6.1"
+lifecycleViewmodelKtxVersion = "2.6.1"
 material = "1.12.0"
 constraintlayout = "2.2.0"
 lifecycleLivedataKtx = "2.8.7"
@@ -27,7 +29,9 @@ datastorePreferencesCoreJvm = "1.1.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastoreCoreAndroid" }
+androidx-lifecycle-livedata-ktx-v261 = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtxVersion" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleLivedataKtx" }
+androidx-lifecycle-viewmodel-ktx-v261 = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtxVersion" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCommon" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCommon" }

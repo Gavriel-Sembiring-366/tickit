@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.jwtdecode)
     implementation(libs.androidx.datastore.preferences)
     implementation (libs.androidx.navigation.compose)
